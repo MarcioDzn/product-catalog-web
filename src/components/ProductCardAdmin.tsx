@@ -1,15 +1,18 @@
+import type { ProductImage } from "../types/Products";
 import { formatCurrency } from "../utils/money";
 import SelectButton from "./SelectButton";
 import Toggle from "./Toggle";
 
 type Props = {
-    id: string;
-    image: string;
+    id: number;
+    image: ProductImage | undefined;
     title: string;
     description: string;
     price: number;
-    selectedProducts: Set<string>;
-    toggleProduct: (id: string) => void;
+    selectedProducts: Set<number>;
+    category: string;
+    stock: number;
+    toggleProduct: (id: number) => void;
 };
 
 export default function ProductCardAdmin({
@@ -19,6 +22,8 @@ export default function ProductCardAdmin({
     description,
     price,
     selectedProducts,
+    category,
+    stock,
     toggleProduct
 }: Props) {
     return (
@@ -37,11 +42,16 @@ export default function ProductCardAdmin({
 
             {/* Imagem (Menor e com borda sutil) */}
             <div className="group relative flex h-14 w-14 shrink-0 cursor-pointer items-center justify-center overflow-hidden rounded-lg border border-gray-100 bg-gray-50">
-                <img
-                    src={image}
-                    alt="Imagem do Produto"
-                    className="h-full w-full object-cover"
-                />
+                {
+                    image && 
+                    <img
+                        src={image.url}
+                        alt="Imagem do Produto"
+                        className="h-full w-full object-cover"
+                    />
+                }
+                
+
             </div>
 
             {/* Container Principal de Informações (flex-1 para esticar e justify-between para espaçar) */}
@@ -63,7 +73,7 @@ export default function ProductCardAdmin({
                         Categoria
                     </h2>
                     <span className="block text-sm font-medium text-gray-700">
-                        Produto
+                        {category}
                     </span>
                 </div>
 
@@ -85,7 +95,7 @@ export default function ProductCardAdmin({
                     <Toggle
                         onChange={(enabled) => {
                             console.log("Visível na loja:", enabled);
-                            // Sua lógica de atualizar o back-end aqui
+                            //TODO: atualizar back-end
                         }}
                     />
                 </div>
@@ -95,7 +105,7 @@ export default function ProductCardAdmin({
                         Quantidade
                     </h2>
                     <span className="block text-sm font-medium text-gray-700">
-                        10 un.
+                        {stock}
                     </span>
                 </div>
 

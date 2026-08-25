@@ -1,5 +1,5 @@
 import { useState } from "react"
-import type { Product } from "../types/Products"
+import type { Category, Product } from "../types/Products"
 import Select from "./select/Select"
 import ProductCardAdmin from "./ProductCardAdmin"
 import SelectButton from "./SelectButton"
@@ -11,12 +11,21 @@ type Props = {
     products: Product[]
     maxProductsPerPage: number
     currentPage: number
+    currentCategory: number
+    categories: Category[]
     onPageChange: (page: number) => void
 }
 
-export default function ProductCardAdminList({ products, maxProductsPerPage, currentPage, onPageChange }: Props) {
-    const [sort, setSort] = useState("");
-    const [category, setCategory] = useState("");
+export default function ProductCardAdminList({ 
+    products, 
+    maxProductsPerPage, 
+    currentPage, 
+    currentCategory,
+    categories,
+    onPageChange 
+}: Props) {
+    const [sort, setSort] = useState(1);
+    const [category, setCategory] = useState(currentCategory);
     const [search, setSearch] = useState("")
 
     const navigate = useNavigate();
@@ -25,14 +34,35 @@ export default function ProductCardAdminList({ products, maxProductsPerPage, cur
         e: React.SubmitEvent<HTMLFormElement>, 
         search: string
     ) => {
-        e.preventDefault()
+        e.preventDefault();
 
-        navigate(
-            `/admin?search=${encodeURIComponent(search)}`
-        );
+        const params = new URLSearchParams(location.search);
+
+        if (search) {
+            params.set('search', search);
+        } else {
+            params.delete('search'); 
+        }
+
+        navigate(`/admin?${params.toString()}`);
     }
 
-    const [selectedProducts, setSelectedProducts] = useState<Set<string>>(
+    const handleCategorySelect = (
+        e: React.ChangeEvent<HTMLSelectElement, HTMLSelectElement>, 
+        categoryId: number
+    ) => {
+        e.preventDefault();
+
+        const params = new URLSearchParams(location.search);
+        
+        params.set('category_id', categoryId.toString());
+
+        setCategory(categoryId)
+
+        navigate(`/admin?${params.toString()}`);
+    }
+
+    const [selectedProducts, setSelectedProducts] = useState<Set<number>>(
         new Set()
     );
     
@@ -50,7 +80,7 @@ export default function ProductCardAdminList({ products, maxProductsPerPage, cur
         });
     }
 
-    function toggleProduct(id: string) {
+    function toggleProduct(id: number) {
         setSelectedProducts((current) => {
             const next = new Set(current);
 
@@ -100,44 +130,35 @@ export default function ProductCardAdminList({ products, maxProductsPerPage, cur
                             onChange={setSearch} 
                             handleSearch={handleSearch}/>
 
-                        <Select
+
+                        {/* <Select
                             value={sort}
                             options={[
                                 {
-                                    value: "recent",
+                                    value: 1,
                                     text: "Mais recentes"
                                 },
                                 {
-                                    value: "price-asc",
+                                    value: 2,
                                     text: "Maior preço"
                                 },
                                 {
-                                    value: "price-desc",
+                                    value: 3,
                                     text: "Menor Preço"
                                 },
 
                             ]}
                             onChange={setSort}
-                        />
+                        /> */}
 
                         <Select
                             value={category}
-                            options={[
-                                {
-                                    value: "mesa",
-                                    text: "Mesa"
-                                },
-                                {
-                                    value: "roupa",
-                                    text: "Roupa"
-                                },
-                                {
-                                    value: "eletrodomestico",
-                                    text: "Eletrodoméstico"
-                                },
-
-                            ]}
-                            onChange={setCategory}
+                                options={categories.map((category) => ({
+                                    value: category.id, 
+                                    text: category.name
+                                })
+                            )}
+                            onChange={handleCategorySelect}
                         />
                     </div>
 
@@ -153,7 +174,13 @@ export default function ProductCardAdminList({ products, maxProductsPerPage, cur
                         {visiblePageProducts.map((product) => (
                             <ProductCardAdmin
                                 key={product.id}
-                                {...product}
+                                id={product.id}
+                                title={product.title}
+                                description={product.description}
+                                price={product.price}
+                                stock={product.stock}
+                                category={product.category.name}
+                                image={product.images.find((image) => image.is_cover)}
                                 selectedProducts={selectedProducts}
                                 toggleProduct={toggleProduct}
                             />

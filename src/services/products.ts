@@ -1,19 +1,23 @@
-import { mockProducts } from "../mocks/products";
 import type { Product } from "../types/Products";
 
-export async function getProducts(
-    search: string = ""
-): Promise<Product[]> {
-    // Simula o tempo de uma API
-    await new Promise((resolve) => setTimeout(resolve, 500));
 
-    if (!search) {
-        return mockProducts;
+export async function getProducts(
+    search: string = "",
+    categoryIds: number[],
+    page: number,
+    pageSize: number
+): Promise<Product[]> {
+    const url = 
+        "http://localhost:8000/products?title=" + search + 
+        "&page=" + page + 
+        "&page_size=" + pageSize +
+        categoryIds.map(categoryId => `&category_ids=${categoryId}`)
+
+    const response = await fetch(url)
+
+    if (!response.ok) {
+        throw new Error("Erro ao buscar produtos")
     }
 
-    return mockProducts.filter((product) =>
-        product.title
-            .toLowerCase()
-            .includes(search.toLowerCase())
-    );
+    return response.json()
 }

@@ -2,11 +2,15 @@ import ProductCardList from "../components/ProductCardList";
 import { useSearchParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { getProducts } from "../services/products";
+import { useState } from "react";
 
 export default function ProductListPage() {
     const [searchParams] = useSearchParams();
 
     const search = searchParams.get("search") ?? "";
+
+    const [categoryIds, setCategoryIds] = useState<number[]>([])
+
 
     const {
         data: products = [],
@@ -14,7 +18,7 @@ export default function ProductListPage() {
         isError,
     } = useQuery({
         queryKey: ["products", search],
-        queryFn: () => getProducts(search),
+        queryFn: () => getProducts(search, categoryIds, 1, 6),
     });
 
     if (isLoading) {

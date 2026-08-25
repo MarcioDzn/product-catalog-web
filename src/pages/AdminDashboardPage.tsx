@@ -3,11 +3,14 @@ import { useQuery } from "@tanstack/react-query";
 import { getProducts } from "../services/products";
 import ProductCardAdminList from "../components/ProductCardAdminList";
 import Button from "../components/Button";
+import { useState } from "react";
+import { getCategories } from "../services/categories";
 
 export default function AdminDashboardPage() {
     const [searchParams, setSearchParams] = useSearchParams();
 
     const search = searchParams.get("search") ?? "";
+    const categoryIds = searchParams.getAll("category_id");
     const page = Number(searchParams.get("page")) || 1;
 
     const handlePageChange = (page: number) => {
@@ -22,8 +25,17 @@ export default function AdminDashboardPage() {
         isLoading,
         isError,
     } = useQuery({
-        queryKey: ["products", search],
-        queryFn: () => getProducts(search),
+        queryKey: ["products", search, page, categoryIds],
+        queryFn: () => getProducts(search, categoryIds.map(categoryId => Number(categoryId)), page, 6),
+    });
+
+    const {
+        data: categories = [],
+        isLoading: isLoadingCategory,
+        isError: isErrorCategory,
+    } = useQuery({
+        queryKey: ["categories", search],
+        queryFn: () => getCategories(search),
     });
 
     if (isLoading) {
@@ -49,6 +61,8 @@ export default function AdminDashboardPage() {
                 products={products}
                 maxProductsPerPage={6}
                 currentPage={page}
+                currentCategory={Number(categoryIds[0])}
+                categories={categories}
                 onPageChange={handlePageChange}
             />
         </main>

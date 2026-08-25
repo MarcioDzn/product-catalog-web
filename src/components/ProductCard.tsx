@@ -1,7 +1,8 @@
+import type { ProductImage } from "../types/Products";
 import { formatCurrency } from "../utils/money";
 
 type Props = {
-    image: string;
+    image: ProductImage | undefined;
     title: string;
     description: string;
     price: number;
@@ -11,11 +12,16 @@ export default function ProductCard({ image, title, description, price }: Props)
     return (
         <div className="flex flex-col gap-4 w-full overflow-hidden bg-white pb-4">
             <div className="group relative h-64 w-full overflow-hidden rounded-xl flex justify-center items-center cursor-pointer">
-                <img 
-                    src={image} 
-                    alt="Imagem do Produto" 
-                    className="h-full w-auto max-w-none"
-                />
+
+                {
+                    image &&                 
+                    <img 
+                        src={image.url} 
+                        alt="Imagem do Produto" 
+                        className="h-full w-auto max-w-none"
+                    />
+                }
+
                 <div className="absolute inset-0 bg-white/30 opacity-0 transition-opacity duration-300 ease-in-out group-hover:opacity-100" />
             </div>
             <div className="group flex flex-col cursor-pointer">

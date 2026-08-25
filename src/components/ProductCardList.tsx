@@ -17,7 +17,13 @@ export default function ProductCardList({ products }: Props) {
                 :
                 <div className="grid w-full grid-cols-2 gap-x-4 gap-y-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
                     {products.map((product) => (
-                        <ProductCard {...product} />
+                        <ProductCard 
+                            key={product.id}
+                            title={product.title}
+                            description={product.description}
+                            price={product.price}
+                            image={product.images.find((image) => image.is_cover)}
+                        />
                     ))}
                 </div>
             }
