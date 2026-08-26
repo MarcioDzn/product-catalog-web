@@ -11,7 +11,9 @@ export async function getProducts(
         "http://localhost:8000/products?title=" + search + 
         "&page=" + page + 
         "&page_size=" + pageSize +
-        categoryIds.map(categoryId => `&category_ids=${categoryId}`)
+        categoryIds
+            .map(categoryId => `&category_ids=${categoryId}`)
+            .join("")
 
     const response = await fetch(url)
 

@@ -13,7 +13,7 @@ export default function SelectButton({ checked, indeterminate = false, onChange 
                 e.stopPropagation();
                 onChange(!checked);
             }}
-            className={`flex h-5 w-5 items-center justify-center rounded border transition-colors ${
+            className={`flex h-5 w-5 items-center justify-center rounded border transition-colors cursor-pointer ${
                 checked || indeterminate
                     ? "border-black bg-black"
                     : "border-gray-300 bg-white hover:border-gray-400"
