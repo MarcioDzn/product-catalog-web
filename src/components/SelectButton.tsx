@@ -1,7 +1,7 @@
 type Props = {
     checked: boolean;
     indeterminate?: boolean;
-    onChange: (checked: boolean) => void;
+    onChange: () => void;
      
 };
 
@@ -11,7 +11,7 @@ export default function SelectButton({ checked, indeterminate = false, onChange 
             type="button"
             onClick={(e) => {
                 e.stopPropagation();
-                onChange(!checked);
+                onChange();
             }}
             className={`flex h-5 w-5 items-center justify-center rounded border transition-colors cursor-pointer ${
                 checked || indeterminate

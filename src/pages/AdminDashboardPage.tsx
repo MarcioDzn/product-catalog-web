@@ -15,7 +15,7 @@ export default function AdminDashboardPage() {
     const page = Number(searchParams.get("page")) || 1;
 
 
-    const [isCategoryAccordionOpen, setIsCategoryAccordionOpen] = useState(false)
+    const [isCategoryAccordionOpen, setIsCategoryAccordionOpen] = useState(true)
 
     const navigate = useNavigate();
 
@@ -73,33 +73,42 @@ export default function AdminDashboardPage() {
 
     return (
         <main className="py-8">
-            <Accordion 
-                title="Categorias"
-                items={categories.map((category) => ({
-                    id: category.id,
-                    text: category.name
-                }))}
-                isOpen={isCategoryAccordionOpen}
-                setIsOpen={setIsCategoryAccordionOpen}
-                selectedItems={categoryIds.map((categoryId) => Number(categoryId))}
-                onChange={handleCategorySelect}
-            />
-            <div className="w-full flex justify-end mb-4">
-                <Button
-                    type="button"
-                    text="Adicionar produto"
-                    onClick={() => console.log("Criar novo produto")}
-                />
-            </div>
+            <div className="flex flex-col">
+                <div className="w-full flex justify-end mb-4">
+                    <Button
+                        type="button"
+                        text="Adicionar produto"
+                        onClick={() => console.log("Criar novo produto")}
+                    />
+                </div>
 
-            <ProductCardAdminList 
-                products={products}
-                maxProductsPerPage={6}
-                currentPage={page}
-                currentCategory={Number(categoryIds[0])}
-                categories={categories}
-                onPageChange={handlePageChange}
-            />
+                <div className="flex flex-row gap-4">
+                    <div className="max-w-48 w-full">
+                        <Accordion 
+                            title="Categorias"
+                            items={categories.map((category) => ({
+                                id: category.id,
+                                text: category.name
+                            }))}
+                            isOpen={isCategoryAccordionOpen}
+                            setIsOpen={setIsCategoryAccordionOpen}
+                            selectedItems={categoryIds.map((categoryId) => Number(categoryId))}
+                            onChange={handleCategorySelect}
+                        />
+                    </div>
+
+                    <ProductCardAdminList 
+                        products={products}
+                        maxProductsPerPage={6}
+                        currentPage={page}
+                        currentCategory={Number(categoryIds[0])}
+                        categories={categories}
+                        onPageChange={handlePageChange}
+                    />
+                </div>
+            </div>
+            
+            
         </main>
     )
 }

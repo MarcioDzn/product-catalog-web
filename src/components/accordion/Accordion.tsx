@@ -28,15 +28,18 @@ export default function Accordion({
     }
 
     return (
-        <div className="flex flex-col items-start w-fit">
-            <div className="flex justify-between items-center gap-2 w-fit">
-                <span>{title}</span>
+        <div className="flex flex-col gap-2 items-start w-full">
+            <div 
+                className="flex justify-between items-center gap-2 w-full cursor-pointer"
+                onClick={() => setIsOpen(!isOpen)}
+            >
+                <span className="font-bold">{title}</span>
 
                 {
                     isOpen ? 
                     <div 
                         className="cursor-pointer"
-                        onClick={() => setIsOpen(false)}
+                        
                     >
                         <svg 
                             xmlns="http://www.w3.org/2000/svg" 
@@ -56,7 +59,6 @@ export default function Accordion({
                     :
                     <div 
                         className="cursor-pointer"
-                        onClick={() => setIsOpen(true)}
                     >
                         <svg 
                             xmlns="http://www.w3.org/2000/svg" 
@@ -85,7 +87,7 @@ export default function Accordion({
                                 id={item.id}
                                 value={item.text}
                                 checked={selectedItems.includes(item.id)}
-                                onChange={() => handleItemSelect(item.id)}
+                                onChange={handleItemSelect}
                             />
                         ))
                     }

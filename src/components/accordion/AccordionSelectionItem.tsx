@@ -4,7 +4,7 @@ type Props = {
     id: number
     value: string
     checked: boolean
-    onChange: (checked: boolean) => void
+    onChange: (id: number) => void
 }
 
 export default function AccordionSelectionItem({
@@ -17,7 +17,7 @@ export default function AccordionSelectionItem({
         <div className="flex items-center gap-2">
             <SelectButton
                 checked={checked}
-                onChange={onChange}
+                onChange={() => onChange(id)}
             />
 
             <span>{value}</span>

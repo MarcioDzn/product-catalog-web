@@ -58,7 +58,7 @@ export default function ProductCardAdmin({
             <div className="flex flex-1 items-center justify-between gap-6">
                 
                 {/* Título e Descrição */}
-                <div className="flex w-64 min-w-0 shrink-0 cursor-pointer flex-col gap-0.5">
+                <div className="flex w-28 min-w-0 shrink-0 cursor-pointer flex-col gap-0.5">
                     <h1 className="truncate text-sm font-semibold text-gray-900">
                         {title}
                     </h1>
