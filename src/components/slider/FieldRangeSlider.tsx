@@ -4,13 +4,14 @@ import { formatCurrency } from "../../utils/money";
 import Input from "../Input";
 
 interface FieldRangeSliderProps { 
-  title: string,
-  value: number[] | number,
+  title: string
+  value: number[] | number
   displayValue: string[] | string
-  min: number,
-  max: number,
-  valuetext: (value: number) => string,
-  onChange: (e: Event, range: number[]) => void;
+  min: number
+  max: number
+  valuetext: (value: number) => string
+  onChange: (e: Event, range: number[]) => void
+  onApply: () => void;
 }
 
 export default function FieldRangeSlider({
@@ -21,6 +22,7 @@ export default function FieldRangeSlider({
   max,
   valuetext, 
   onChange,
+  onApply,
 }: FieldRangeSliderProps) {
 
   const handleChange = (
@@ -58,6 +60,7 @@ export default function FieldRangeSlider({
           getAriaLabel={() => title}
           value={value}
           onChange={handleChange}
+          onChangeCommitted={onApply}
           valueLabelDisplay="auto"
           getAriaValueText={valuetext}
           min={min}
@@ -75,7 +78,12 @@ export default function FieldRangeSlider({
                 placeholder="Valor mínimo"
                 value={String(value[0])}
                 onChange={onHandleMinValueChange}
-                className=""
+                onBlur={onApply}
+                onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                        onApply();
+                    }
+                }}
               />
 
               <Input 
@@ -83,6 +91,12 @@ export default function FieldRangeSlider({
                 placeholder="Valor mínimo"
                 value={String(value[1])}
                 onChange={onHandleMaxValueChange}
+                onBlur={onApply}
+                onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                        onApply();
+                    }
+                }}
               />
           </div>
         }

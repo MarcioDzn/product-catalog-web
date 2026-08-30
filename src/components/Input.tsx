@@ -6,9 +6,11 @@ type Props = {
     placeholder: string
     onChange: (value: string) => void
     className?: string
+    onBlur?: () => void
+    onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void
 }
 
-export default function Input({ id, value, placeholder, onChange, className }: Props) {
+export default function Input({ id, value, placeholder, onChange, className, onBlur, onKeyDown }: Props) {
     return (
         <input
             id={id}
@@ -20,6 +22,8 @@ export default function Input({ id, value, placeholder, onChange, className }: P
             placeholder={placeholder}
             value={value}
             onChange={(e) => onChange(e.target.value)}
+            onBlur={onBlur}
+            onKeyDown={onKeyDown}
         />
     )
 }

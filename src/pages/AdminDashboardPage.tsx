@@ -54,31 +54,27 @@ export default function AdminDashboardPage() {
 
     const navigate = useNavigate();
 
-    useEffect(() => {
-        const timer = setTimeout(() => {
-                const params = new URLSearchParams(searchParams);
+    const applyPriceFilter = () => {
+        setTimeout(() => {
+            const params = new URLSearchParams(searchParams);
 
-                params.set("min_price", String(priceFilter[0]));
-                params.set("max_price", String(priceFilter[1]));
+            params.set("min_price", String(priceFilter[0]));
+            params.set("max_price", String(priceFilter[1]));
 
-                setSearchParams(params);
+            setSearchParams(params);
         }, 1000);
+    };
 
-        return () => clearTimeout(timer);
-    }, [priceFilter]);
+    const applyStockFilter = () => {
+        setTimeout(() => {
+            const params = new URLSearchParams(searchParams);
 
-    useEffect(() => {
-        const timer = setTimeout(() => {
-                const params = new URLSearchParams(searchParams);
+            params.set("min_stock", String(stockFilter[0]));
+            params.set("max_stock", String(stockFilter[1]));
 
-                params.set("min_stock", String(stockFilter[0]));
-                params.set("max_stock", String(stockFilter[1]));
-
-                setSearchParams(params);
+            setSearchParams(params);
         }, 1000);
-
-        return () => clearTimeout(timer);
-    }, [stockFilter]);
+    };
 
     const handlePageChange = (page: number) => {
         setSearchParams((current) => {
@@ -186,6 +182,7 @@ export default function AdminDashboardPage() {
                             max={MAX_PRICE}
                             valuetext={pricetext}
                             onChange={handlePriceFilter}
+                            onApply={applyPriceFilter}
                         />
                     </div>
 
@@ -198,6 +195,7 @@ export default function AdminDashboardPage() {
                             max={MAX_STOCK}
                             valuetext={stocktext}
                             onChange={handleStockFilter}
+                            onApply={applyStockFilter}
                         />
                     </div>
 
