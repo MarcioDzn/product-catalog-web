@@ -4,6 +4,8 @@ import type { Product } from "../types/Products";
 export async function getProducts(
     search: string = "",
     categoryIds: number[],
+    minPrice: number,
+    maxPrice: number,
     page: number,
     pageSize: number
 ): Promise<Product[]> {
@@ -13,7 +15,9 @@ export async function getProducts(
         "&page_size=" + pageSize +
         categoryIds
             .map(categoryId => `&category_ids=${categoryId}`)
-            .join("")
+            .join("") +
+        "&min_price=" + minPrice +
+        "&max_price=" + maxPrice
 
     const response = await fetch(url)
 

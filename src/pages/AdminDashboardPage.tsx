@@ -3,9 +3,20 @@ import { useQuery } from "@tanstack/react-query";
 import { getProducts } from "../services/products";
 import ProductCardAdminList from "../components/ProductCardAdminList";
 import Button from "../components/Button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { getCategories } from "../services/categories";
 import Accordion from "../components/accordion/Accordion";
+import Slider from '@mui/material/Slider';
+import RangeSlider from "../components/slider/FieldRangeSlider";
+import FieldRangeSlider from "../components/slider/FieldRangeSlider";
+import { formatCurrency } from "../utils/money";
+
+function pricetext(price: number) {
+  return `R$${price}`;
+}
+
+const MIN_PRICE = 0;
+const MAX_PRICE = 10000;
 
 export default function AdminDashboardPage() {
     const [searchParams, setSearchParams] = useSearchParams();
@@ -14,10 +25,29 @@ export default function AdminDashboardPage() {
     const categoryIds = searchParams.getAll("category_id");
     const page = Number(searchParams.get("page")) || 1;
 
+    const minPrice = Number(searchParams.get("min_price")) || MIN_PRICE;
+    const maxPrice = Number(searchParams.get("max_price")) || MAX_PRICE;
+    const [priceFilter, setPriceFilter] = useState<number[]>([    
+        Math.min(minPrice, maxPrice),
+        Math.max(minPrice, maxPrice)
+    ])
 
     const [isCategoryAccordionOpen, setIsCategoryAccordionOpen] = useState(true)
 
     const navigate = useNavigate();
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+                const params = new URLSearchParams(searchParams);
+
+                params.set("min_price", String(priceFilter[0]));
+                params.set("max_price", String(priceFilter[1]));
+
+                setSearchParams(params);
+        }, 1000);
+
+        return () => clearTimeout(timer);
+    }, [priceFilter]);
 
     const handlePageChange = (page: number) => {
         setSearchParams((current) => {
@@ -26,13 +56,25 @@ export default function AdminDashboardPage() {
         });
     };
 
+    const handlePriceFilter = (e: Event, newPrice: number[]) => {
+        setPriceFilter(newPrice);
+    }
+
     const {
         data: products = [],
         isLoading,
         isError,
     } = useQuery({
-        queryKey: ["products", search, page, categoryIds],
-        queryFn: () => getProducts(search, categoryIds.map(categoryId => Number(categoryId)), page, 6),
+        queryKey: ["products", search, page, categoryIds, minPrice, maxPrice],
+        queryFn: () => 
+            getProducts(
+                search, 
+                categoryIds.map(categoryId => Number(categoryId)), 
+                minPrice,
+                maxPrice,
+                page, 
+                6
+            ),
     });
 
     console.log(categoryIds)
@@ -95,6 +137,27 @@ export default function AdminDashboardPage() {
                             selectedItems={categoryIds.map((categoryId) => Number(categoryId))}
                             onChange={handleCategorySelect}
                         />
+
+                    <div className="flex flex-col">
+                        <FieldRangeSlider 
+                            title="Preço"
+                            value={priceFilter}
+                            min={MIN_PRICE}
+                            max={MAX_PRICE}
+                            valuetext={pricetext}
+                            onChange={handlePriceFilter}
+                        />
+                        <div className="flex flex-row justify-between items-center">
+                            <span className="text-sm">
+                                {`${formatCurrency(priceFilter[0])}`}
+                            </span>
+                            <span className="text-sm">
+                                {`${formatCurrency(priceFilter[1])}`}
+                            </span>
+                        </div>
+                    </div>
+
+
                     </div>
 
                     <ProductCardAdminList 
