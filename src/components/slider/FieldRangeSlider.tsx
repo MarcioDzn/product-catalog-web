@@ -1,6 +1,7 @@
 import Slider from "@mui/material/Slider";
 import { useState, useCallback, useId } from "react";
 import { formatCurrency } from "../../utils/money";
+import Input from "../Input";
 
 interface FieldRangeSliderProps { 
   title: string,
@@ -31,6 +32,24 @@ export default function FieldRangeSlider({
     }
   };
 
+    const onHandleMinValueChange = (newMinValue: string) => {
+        if (Array.isArray(value)) {
+            onChange(
+                new Event("change"),
+                [Number(newMinValue), value[1]]
+            );
+        }
+    };
+
+    const onHandleMaxValueChange = (newMaxValue: string) => {
+        if (Array.isArray(value)) {
+            onChange(
+                new Event("change"),
+                [value[0], Number(newMaxValue)]
+            );
+        }
+    };
+
   return (
       <div className="flex flex-col gap-2 h-full">
         <span className="font-bold">{title}</span>
@@ -49,22 +68,22 @@ export default function FieldRangeSlider({
         />
 
         {
-          Array.isArray(value) ?
-          <div className="flex flex-row justify-between items-center">
-              <span className="text-sm">
-                  {displayValue[0]}
-              </span>
-              <span className="text-sm">
-                  {displayValue[1]}
-              </span>
-          </div>
+          Array.isArray(value) &&
+          <div className="flex flex-row justify-between gap-4 items-center">
+              <Input 
+                id="min-value-input"
+                placeholder="Valor mínimo"
+                value={String(value[0])}
+                onChange={onHandleMinValueChange}
+                className=""
+              />
 
-          :
-
-          <div className="flex flex-row justify-start items-center">
-              <span className="text-sm">
-                  {displayValue}
-              </span>
+              <Input 
+                id="min-value-input"
+                placeholder="Valor mínimo"
+                value={String(value[1])}
+                onChange={onHandleMaxValueChange}
+              />
           </div>
         }
 
