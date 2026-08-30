@@ -32,11 +32,13 @@ export default function AdminDashboardPage() {
     const categoryIds = searchParams.getAll("category_id");
     const page = Number(searchParams.get("page")) || 1;
 
-    const minPrice = Number(searchParams.get("min_price")) || MIN_PRICE;
-    const maxPrice = Number(searchParams.get("max_price")) || MAX_PRICE;
+    const price = {
+        minPrice: Number(searchParams.get("min_price")) || MIN_PRICE,
+        maxPrice: Number(searchParams.get("max_price")) || MAX_PRICE
+    }
     const [priceFilter, setPriceFilter] = useState<number[]>([    
-        Math.min(minPrice, maxPrice),
-        Math.max(minPrice, maxPrice)
+        Math.min(price.minPrice, price.maxPrice),
+        Math.max(price.minPrice, price.maxPrice)
     ])
 
     const stock = {
@@ -99,13 +101,12 @@ export default function AdminDashboardPage() {
         isLoading,
         isError,
     } = useQuery({
-        queryKey: ["products", search, page, categoryIds, minPrice, maxPrice, stock],
+        queryKey: ["products", search, page, categoryIds, price, stock],
         queryFn: () => 
             getProducts(
                 search, 
                 categoryIds.map(categoryId => Number(categoryId)), 
-                minPrice,
-                maxPrice,
+                price,
                 stock,
                 page, 
                 6

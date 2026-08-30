@@ -4,8 +4,7 @@ import type { Product } from "../types/Products";
 export async function getProducts(
     search: string = "",
     categoryIds: number[],
-    minPrice: number,
-    maxPrice: number,
+    price: {minPrice: number, maxPrice: number},
     stock: {minStock: number, maxStock: number},
     page: number,
     pageSize: number
@@ -17,8 +16,8 @@ export async function getProducts(
         categoryIds
             .map(categoryId => `&category_ids=${categoryId}`)
             .join("") +
-        "&min_price=" + minPrice +
-        "&max_price=" + maxPrice +
+        "&min_price=" + price.minPrice +
+        "&max_price=" + price.maxPrice +
         "&min_stock=" + stock.minStock +
         "&max_stock=" + stock.maxStock
 
