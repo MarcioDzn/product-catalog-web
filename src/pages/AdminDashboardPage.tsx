@@ -178,38 +178,27 @@ export default function AdminDashboardPage() {
                         <FieldRangeSlider 
                             title="Preço"
                             value={priceFilter}
+                            displayValue={[
+                                `${formatCurrency(priceFilter[0])}`, 
+                                `${formatCurrency(priceFilter[1])}`
+                            ]}
                             min={MIN_PRICE}
                             max={MAX_PRICE}
                             valuetext={pricetext}
                             onChange={handlePriceFilter}
                         />
-                        <div className="flex flex-row justify-between items-center">
-                            <span className="text-sm">
-                                {`${formatCurrency(priceFilter[0])}`}
-                            </span>
-                            <span className="text-sm">
-                                {`${formatCurrency(priceFilter[1])}`}
-                            </span>
-                        </div>
                     </div>
 
                     <div className="flex flex-col">
                         <FieldRangeSlider 
                             title="Estoque"
                             value={stockFilter}
+                            displayValue={[`${stockFilter[0]}`, `${stockFilter[1]}`]}
                             min={MIN_STOCK}
                             max={MAX_STOCK}
                             valuetext={stocktext}
                             onChange={handleStockFilter}
                         />
-                        <div className="flex flex-row justify-between items-center">
-                            <span className="text-sm">
-                                {`${stockFilter[0]}`}
-                            </span>
-                            <span className="text-sm">
-                                {`${stockFilter[1]}`}
-                            </span>
-                        </div>
                     </div>
 
                     </div>

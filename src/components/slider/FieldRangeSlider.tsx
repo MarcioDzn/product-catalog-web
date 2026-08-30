@@ -1,9 +1,11 @@
 import Slider from "@mui/material/Slider";
 import { useState, useCallback, useId } from "react";
+import { formatCurrency } from "../../utils/money";
 
 interface FieldRangeSliderProps { 
   title: string,
   value: number[] | number,
+  displayValue: string[] | string
   min: number,
   max: number,
   valuetext: (value: number) => string,
@@ -13,6 +15,7 @@ interface FieldRangeSliderProps {
 export default function FieldRangeSlider({
   title, 
   value, 
+  displayValue,
   min, 
   max,
   valuetext, 
@@ -44,6 +47,27 @@ export default function FieldRangeSlider({
             color: '#000',
           }}
         />
+
+        {
+          Array.isArray(value) ?
+          <div className="flex flex-row justify-between items-center">
+              <span className="text-sm">
+                  {displayValue[0]}
+              </span>
+              <span className="text-sm">
+                  {displayValue[1]}
+              </span>
+          </div>
+
+          :
+
+          <div className="flex flex-row justify-start items-center">
+              <span className="text-sm">
+                  {displayValue}
+              </span>
+          </div>
+        }
+
     </div>
 
   )
