@@ -1,4 +1,4 @@
-import type { Product } from "../types/Products";
+import type { Product, ProductCreate } from "../types/Products";
 
 
 export async function getProducts(
@@ -27,6 +27,28 @@ export async function getProducts(
 
     if (!response.ok) {
         throw new Error("Erro ao buscar produtos")
+    }
+
+    return response.json()
+}
+
+export async function createProduct(data: ProductCreate): Promise<Product> {
+    const response = await fetch("http://localhost:8000/products/", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+    })
+
+    if (!response.ok) {
+        const error = await response.text()
+
+        console.error("STATUS:", response.status)
+        console.error("ERRO DA API:", error)
+        console.error("DADOS ENVIADOS:", data)
+
+        throw new Error(`Erro ao criar produto: ${response.status}`)
     }
 
     return response.json()
