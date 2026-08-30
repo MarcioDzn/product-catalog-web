@@ -161,42 +161,7 @@ export default function AdminDashboardPage() {
     }
 
     return (
-        <main className="py-8">
-            <Select
-                value={currentSortFilter}  
-                options={[
-                    {
-                        value: "default",
-                        text: "Escolha"  
-                    },
-                    {
-                        value: "price_desc",
-                        text: "Maior Preço"  
-                    },
-                    {
-                        value: "price_asc",
-                        text: "Menor Preço"  
-                    },
-                    {
-                        value: "stock_asc",
-                        text: "Menor Estoque"  
-                    },
-                    {
-                        value: "stock_desc",
-                        text: "Maior Estoque"  
-                    },
-                    {
-                        value: "newest",
-                        text: "Mais recentes"  
-                    },
-                    {
-                        value: "oldest",
-                        text: "Mais antigos"  
-                    }
-                ]}
-                onChange={handleSortChange}
-            />
-                                    
+        <main className="py-8">     
             <div className="flex flex-col">
                 <div className="w-full flex justify-end mb-4">
                     <Button
@@ -208,6 +173,45 @@ export default function AdminDashboardPage() {
 
                 <div className="flex flex-row gap-4">
                     <div className="max-w-48 w-full">
+                        <div className="flex flex-col">
+                            <span className="font-bold">Ordenar por</span>
+                            <Select
+                                value={currentSortFilter}  
+                                options={[
+                                    {
+                                        value: "default",
+                                        text: "Escolha"  
+                                    },
+                                    {
+                                        value: "price_desc",
+                                        text: "Maior Preço"  
+                                    },
+                                    {
+                                        value: "price_asc",
+                                        text: "Menor Preço"  
+                                    },
+                                    {
+                                        value: "stock_asc",
+                                        text: "Menor Estoque"  
+                                    },
+                                    {
+                                        value: "stock_desc",
+                                        text: "Maior Estoque"  
+                                    },
+                                    {
+                                        value: "newest",
+                                        text: "Mais recentes"  
+                                    },
+                                    {
+                                        value: "oldest",
+                                        text: "Mais antigos"  
+                                    }
+                                ]}
+                                onChange={handleSortChange}
+                            />
+                        </div>
+                        
+
                         <Accordion 
                             title="Categorias"
                             items={categories.map((category) => ({
@@ -220,34 +224,34 @@ export default function AdminDashboardPage() {
                             onChange={handleCategorySelect}
                         />
 
-                    <div className="flex flex-col">
-                        <FieldRangeSlider 
-                            title="Preço"
-                            value={priceFilter}
-                            displayValue={[
-                                `${formatCurrency(priceFilter[0])}`, 
-                                `${formatCurrency(priceFilter[1])}`
-                            ]}
-                            min={MIN_PRICE}
-                            max={MAX_PRICE}
-                            valuetext={pricetext}
-                            onChange={handlePriceFilter}
-                            onApply={applyPriceFilter}
-                        />
-                    </div>
+                        <div className="flex flex-col">
+                            <FieldRangeSlider 
+                                title="Preço"
+                                value={priceFilter}
+                                displayValue={[
+                                    `${formatCurrency(priceFilter[0])}`, 
+                                    `${formatCurrency(priceFilter[1])}`
+                                ]}
+                                min={MIN_PRICE}
+                                max={MAX_PRICE}
+                                valuetext={pricetext}
+                                onChange={handlePriceFilter}
+                                onApply={applyPriceFilter}
+                            />
+                        </div>
 
-                    <div className="flex flex-col">
-                        <FieldRangeSlider 
-                            title="Estoque"
-                            value={stockFilter}
-                            displayValue={[`${stockFilter[0]}`, `${stockFilter[1]}`]}
-                            min={MIN_STOCK}
-                            max={MAX_STOCK}
-                            valuetext={stocktext}
-                            onChange={handleStockFilter}
-                            onApply={applyStockFilter}
-                        />
-                    </div>
+                        <div className="flex flex-col">
+                            <FieldRangeSlider 
+                                title="Estoque"
+                                value={stockFilter}
+                                displayValue={[`${stockFilter[0]}`, `${stockFilter[1]}`]}
+                                min={MIN_STOCK}
+                                max={MAX_STOCK}
+                                valuetext={stocktext}
+                                onChange={handleStockFilter}
+                                onApply={applyStockFilter}
+                            />
+                        </div>
 
                     </div>
 
