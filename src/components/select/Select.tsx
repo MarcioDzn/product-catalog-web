@@ -1,12 +1,14 @@
+import type { ChangeEvent} from "react";
+
 type Option = {
-    value: number
+    value: string
     text: string
 }
 
 type Props = {
-    value: number;
+    value: string;
     options: Option[]
-    onChange: (e: React.ChangeEvent<HTMLSelectElement, HTMLSelectElement>, value: number) => void;
+    onChange: (e: ChangeEvent<HTMLSelectElement>, value: string) => void;
 };
 
 export default function Select({ value, options, onChange }: Props) {
@@ -14,7 +16,7 @@ export default function Select({ value, options, onChange }: Props) {
         <div className="relative w-full">
             <select
                 value={value}
-                onChange={(e) => onChange(e, Number(e.target.value))}
+                onChange={(e: ChangeEvent<HTMLSelectElement>) => onChange(e, e.target.value)}
                 className="cursor-pointer appearance-none rounded-lg w-full h-full border border-gray-200 bg-white px-3 py-2 pr-10 text-sm outline-none transition focus:border-gray-400"
             >
                 {

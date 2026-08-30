@@ -6,6 +6,7 @@ export async function getProducts(
     categoryIds: number[],
     price: {minPrice: number, maxPrice: number},
     stock: {minStock: number, maxStock: number},
+    sort: string,
     page: number,
     pageSize: number
 ): Promise<Product[]> {
@@ -19,7 +20,8 @@ export async function getProducts(
         "&min_price=" + price.minPrice +
         "&max_price=" + price.maxPrice +
         "&min_stock=" + stock.minStock +
-        "&max_stock=" + stock.maxStock
+        "&max_stock=" + stock.maxStock +
+        `${sort === "default" || !sort ? "" :  "&sort=" + sort}`
 
     const response = await fetch(url)
 

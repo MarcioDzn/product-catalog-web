@@ -11,21 +11,16 @@ type Props = {
     products: Product[]
     maxProductsPerPage: number
     currentPage: number
-    currentCategory: number
-    categories: Category[]
     onPageChange: (page: number) => void
 }
 
 export default function ProductCardAdminList({ 
     products, 
     maxProductsPerPage, 
-    currentPage, 
-    currentCategory,
-    categories,
+    currentPage,
     onPageChange 
 }: Props) {
     const [sort, setSort] = useState(1);
-    const [category, setCategory] = useState(currentCategory);
     const [search, setSearch] = useState("")
 
     const navigate = useNavigate();
@@ -43,21 +38,6 @@ export default function ProductCardAdminList({
         } else {
             params.delete('search'); 
         }
-
-        navigate(`/admin?${params.toString()}`);
-    }
-
-    const handleCategorySelect = (
-        e: React.ChangeEvent<HTMLSelectElement, HTMLSelectElement>, 
-        categoryId: number
-    ) => {
-        e.preventDefault();
-
-        const params = new URLSearchParams(location.search);
-        
-        params.set('category_id', categoryId.toString());
-
-        setCategory(categoryId)
 
         navigate(`/admin?${params.toString()}`);
     }
@@ -151,15 +131,6 @@ export default function ProductCardAdminList({
                             onChange={setSort}
                         /> */}
 
-                        <Select
-                            value={category}
-                                options={categories.map((category) => ({
-                                    value: category.id, 
-                                    text: category.name
-                                })
-                            )}
-                            onChange={handleCategorySelect}
-                        />
                     </div>
 
                 </div>

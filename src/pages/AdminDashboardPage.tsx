@@ -3,13 +3,14 @@ import { useQuery } from "@tanstack/react-query";
 import { getProducts } from "../services/products";
 import ProductCardAdminList from "../components/ProductCardAdminList";
 import Button from "../components/Button";
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ChangeEvent } from "react";
 import { getCategories } from "../services/categories";
 import Accordion from "../components/accordion/Accordion";
 import Slider from '@mui/material/Slider';
 import RangeSlider from "../components/slider/FieldRangeSlider";
 import FieldRangeSlider from "../components/slider/FieldRangeSlider";
 import { formatCurrency } from "../utils/money";
+import Select from "../components/select/Select";
 
 function pricetext(price: number) {
   return `R$${price}`;
@@ -31,6 +32,7 @@ export default function AdminDashboardPage() {
     const search = searchParams.get("search") ?? "";
     const categoryIds = searchParams.getAll("category_id");
     const page = Number(searchParams.get("page")) || 1;
+    const currentSortFilter = searchParams.get("sort") ?? "default";
 
     const price = {
         minPrice: Number(searchParams.get("min_price")) || MIN_PRICE,
@@ -82,6 +84,18 @@ export default function AdminDashboardPage() {
             return current;
         });
     };
+
+    const handleSortChange = (
+        e: ChangeEvent<HTMLSelectElement>,
+        value: string
+    ) => {
+        const params = new URLSearchParams(searchParams);
+
+        params.set("sort", value);
+        params.set("page", "1");
+
+        setSearchParams(params);
+    };
     
 
     const handlePriceFilter = (e: Event, newPrice: number[]) => {
@@ -97,13 +111,14 @@ export default function AdminDashboardPage() {
         isLoading,
         isError,
     } = useQuery({
-        queryKey: ["products", search, page, categoryIds, price, stock],
+        queryKey: ["products", search, page, categoryIds, price, stock, currentSortFilter],
         queryFn: () => 
             getProducts(
                 search, 
                 categoryIds.map(categoryId => Number(categoryId)), 
                 price,
                 stock,
+                currentSortFilter,
                 page, 
                 6
             ),
@@ -147,6 +162,41 @@ export default function AdminDashboardPage() {
 
     return (
         <main className="py-8">
+            <Select
+                value={currentSortFilter}  
+                options={[
+                    {
+                        value: "default",
+                        text: "Escolha"  
+                    },
+                    {
+                        value: "price_desc",
+                        text: "Maior Preço"  
+                    },
+                    {
+                        value: "price_asc",
+                        text: "Menor Preço"  
+                    },
+                    {
+                        value: "stock_asc",
+                        text: "Menor Estoque"  
+                    },
+                    {
+                        value: "stock_desc",
+                        text: "Maior Estoque"  
+                    },
+                    {
+                        value: "newest",
+                        text: "Mais recentes"  
+                    },
+                    {
+                        value: "oldest",
+                        text: "Mais antigos"  
+                    }
+                ]}
+                onChange={handleSortChange}
+            />
+                                    
             <div className="flex flex-col">
                 <div className="w-full flex justify-end mb-4">
                     <Button
@@ -205,8 +255,6 @@ export default function AdminDashboardPage() {
                         products={products}
                         maxProductsPerPage={6}
                         currentPage={page}
-                        currentCategory={Number(categoryIds[0])}
-                        categories={categories}
                         onPageChange={handlePageChange}
                     />
                 </div>

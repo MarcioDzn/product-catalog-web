@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, type ChangeEvent } from "react";
 import FieldInput from "../components/FieldInput";
 import FieldRichTextEditor from "../components/richText/FieldRichTextEditor";
 import FieldImagePicker from "../components/imagePicker/FieldImagePicker";
@@ -104,7 +104,10 @@ export default function CreateProductPage() {
                                         text: "Inativo"
                                     },
                                 ]}
-                                onChange={setStatus}
+                                onChange={(
+                                    e: ChangeEvent<HTMLSelectElement>, 
+                                    status: string
+                                ) => setStatus(status)}
                         />
                     </div>
 
@@ -127,7 +130,10 @@ export default function CreateProductPage() {
                                         text: "Eletrodoméstico"
                                     },
                                 ]}
-                                onChange={setCategory}
+                                onChange={(
+                                    e: ChangeEvent<HTMLSelectElement>, 
+                                    category: string
+                                ) => setCategory(category)}
                         />
                     </div>
 
