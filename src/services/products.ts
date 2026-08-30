@@ -6,6 +6,7 @@ export async function getProducts(
     categoryIds: number[],
     minPrice: number,
     maxPrice: number,
+    stock: {minStock: number, maxStock: number},
     page: number,
     pageSize: number
 ): Promise<Product[]> {
@@ -17,7 +18,9 @@ export async function getProducts(
             .map(categoryId => `&category_ids=${categoryId}`)
             .join("") +
         "&min_price=" + minPrice +
-        "&max_price=" + maxPrice
+        "&max_price=" + maxPrice +
+        "&min_stock=" + stock.minStock +
+        "&max_stock=" + stock.maxStock
 
     const response = await fetch(url)
 

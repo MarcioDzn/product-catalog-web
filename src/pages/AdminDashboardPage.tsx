@@ -15,8 +15,15 @@ function pricetext(price: number) {
   return `R$${price}`;
 }
 
+function stocktext(price: number) {
+  return `${price}`;
+}
+
 const MIN_PRICE = 0;
 const MAX_PRICE = 10000;
+
+const MIN_STOCK = 0;
+const MAX_STOCK = 200;
 
 export default function AdminDashboardPage() {
     const [searchParams, setSearchParams] = useSearchParams();
@@ -30,6 +37,15 @@ export default function AdminDashboardPage() {
     const [priceFilter, setPriceFilter] = useState<number[]>([    
         Math.min(minPrice, maxPrice),
         Math.max(minPrice, maxPrice)
+    ])
+
+    const stock = {
+        minStock: Number(searchParams.get("min_stock")) || MIN_STOCK,
+        maxStock: Number(searchParams.get("max_stock")) || MAX_STOCK
+    }
+    const [stockFilter, setStockFilter] = useState<number[]>([    
+        Math.min(stock.minStock, stock.maxStock),
+        Math.max(stock.minStock, stock.maxStock)
     ])
 
     const [isCategoryAccordionOpen, setIsCategoryAccordionOpen] = useState(true)
@@ -49,15 +65,33 @@ export default function AdminDashboardPage() {
         return () => clearTimeout(timer);
     }, [priceFilter]);
 
+    useEffect(() => {
+        const timer = setTimeout(() => {
+                const params = new URLSearchParams(searchParams);
+
+                params.set("min_stock", String(stockFilter[0]));
+                params.set("max_stock", String(stockFilter[1]));
+
+                setSearchParams(params);
+        }, 1000);
+
+        return () => clearTimeout(timer);
+    }, [stockFilter]);
+
     const handlePageChange = (page: number) => {
         setSearchParams((current) => {
             current.set("page", String(page));
             return current;
         });
     };
+    
 
     const handlePriceFilter = (e: Event, newPrice: number[]) => {
         setPriceFilter(newPrice);
+    }
+
+    const handleStockFilter = (e: Event, newStock: number[]) => {
+        setStockFilter(newStock);
     }
 
     const {
@@ -65,13 +99,14 @@ export default function AdminDashboardPage() {
         isLoading,
         isError,
     } = useQuery({
-        queryKey: ["products", search, page, categoryIds, minPrice, maxPrice],
+        queryKey: ["products", search, page, categoryIds, minPrice, maxPrice, stock],
         queryFn: () => 
             getProducts(
                 search, 
                 categoryIds.map(categoryId => Number(categoryId)), 
                 minPrice,
                 maxPrice,
+                stock,
                 page, 
                 6
             ),
@@ -157,6 +192,24 @@ export default function AdminDashboardPage() {
                         </div>
                     </div>
 
+                    <div className="flex flex-col">
+                        <FieldRangeSlider 
+                            title="Estoque"
+                            value={stockFilter}
+                            min={MIN_STOCK}
+                            max={MAX_STOCK}
+                            valuetext={stocktext}
+                            onChange={handleStockFilter}
+                        />
+                        <div className="flex flex-row justify-between items-center">
+                            <span className="text-sm">
+                                {`${stockFilter[0]}`}
+                            </span>
+                            <span className="text-sm">
+                                {`${stockFilter[1]}`}
+                            </span>
+                        </div>
+                    </div>
 
                     </div>
 
