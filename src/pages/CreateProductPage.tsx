@@ -119,6 +119,7 @@ export default function CreateProductPage() {
                                 <FieldInput 
                                     id="product-price"
                                     label="Preço"
+                                    mode="currency"
                                     placeholder="R$ 10,00"
                                     value={productPrice}
                                     onChange={setProductPrice}
@@ -130,6 +131,7 @@ export default function CreateProductPage() {
                                     id="product-stock"
                                     label="Quantidade em estoque"
                                     placeholder="Insira a quantidade em estoque"
+                                    mode="integer"
                                     value={productStock}
                                     onChange={setProductStock}
                                 />
