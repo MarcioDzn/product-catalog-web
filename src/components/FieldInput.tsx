@@ -5,6 +5,7 @@ type Props = {
     label: string
     value: string,
     placeholder: string,
+    error: string
     mode?: "integer" | "float" | "currency"
     onChange: (value: string) => void
 }
@@ -14,27 +15,35 @@ export default function FieldInput({
     label, 
     value, 
     placeholder, 
+    error,
     mode, 
     onChange 
 }: Props) {
     return (
-        <div className="flex flex-col gap-2">
-            <label 
-                htmlFor={id} 
-                className="text-sm font-medium text-gray-700">
-                    {label}
-                
-            </label>
+        <div className="flex flex-col gap-1">
+            <div className="flex flex-col gap-2">
+                <label 
+                    htmlFor={id} 
+                    className="text-sm font-medium text-gray-700">
+                        {label}
+                    
+                </label>
 
-            
-            <Input 
-                id={id} 
-                value={value} 
-                placeholder={placeholder} 
-                mode={mode}
-                onChange={onChange}
-                className="rounded-lg px-2 py-2 border border-gray-300 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all duration-200"
-            />
+                
+                <Input 
+                    id={id} 
+                    value={value} 
+                    placeholder={placeholder} 
+                    mode={mode}
+                    onChange={onChange}
+                    className="rounded-lg px-2 py-2 border border-gray-300 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all duration-200"
+                />
+            </div>
+
+
+            <span className="text-sm text-red-600">
+                {error}
+            </span>
         </div>
     )
 }

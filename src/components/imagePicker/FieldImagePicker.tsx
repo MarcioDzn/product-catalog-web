@@ -5,6 +5,7 @@ type Props = {
     label: string
     images: string[]
     isDisabled: boolean
+    error: string
     handleRemoveImage: (index: number) => void
     handleAddImages: (images: string[]) => void
 }
@@ -14,6 +15,7 @@ export default function FieldImagePicker({
     label, 
     images, 
     isDisabled,
+    error,
     handleAddImages, 
     handleRemoveImage 
 }: Props) {
@@ -24,7 +26,11 @@ export default function FieldImagePicker({
                 className="text-sm font-medium text-gray-700">
                     {label}
             </label>
-            
+
+            <span className="text-sm text-red-600">
+                {error}
+            </span>
+
             <div className="flex flex-col gap-4 h-full">
                 <div className="relative w-full aspect-square rounded-lg overflow-hidden bg-gray-100">
                     <img

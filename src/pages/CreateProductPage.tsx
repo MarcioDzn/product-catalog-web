@@ -8,20 +8,21 @@ import type { ProductCreate } from "../types/Products";
 import { getCategories } from "../services/categories";
 import { useQuery } from "@tanstack/react-query";
 import { createProduct } from "../services/products";
+import { productSchema } from "../schemas/productSchema";
+import type z from "zod";
+
+const MAX_IMAGES = 25
 
 export default function CreateProductPage() {
     const [productTitle, setProductTitle] = useState("")
     const [productPrice, setProductPrice] = useState("")
-    const [productStock, setProductStock] = useState("")
+    const [productStock, setProductStock] = useState("1")
     const [description, setDescription] = useState("")
     const [category, setCategory] = useState("");
-    const [status, setStatus] = useState("");
+    const [status, setStatus] = useState("active");
     const [images, setImages] = useState<string[]>([])
 
-    const MAX_IMAGES = 25
-
-
-
+    const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
 
     function handleSetImages(newImages: string[]) {
         const selectedImages = newImages.slice(0, MAX_IMAGES - images.length)
@@ -43,31 +44,59 @@ export default function CreateProductPage() {
         queryFn: () => getCategories(),
     });
 
-    async function handleCreateProduct(e: React.SubmitEvent<HTMLFormElement>) {
+    function getFieldErrors(error: z.ZodError): Record<string, string> {
+        const errors: Record<string, string> = {}
+        for (const issue of error.issues) {
+            const key = issue.path[0]
+            if (typeof key === "string" && !errors[key]) {
+                errors[key] = issue.message
+            }
+        }
+        return errors
+    }
+
+    async function handleCreateProduct(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault()
 
-        const newProduct: ProductCreate = {
-            category_id: Number(category),
+        const validation = productSchema.safeParse({
             title: productTitle,
-            description: description,
-            price: Number(productPrice),
-            is_visible: status === "active",
-            stock: Number(productStock),
-            images: images.map((image, index) => ({
+            description,
+            price: productPrice,
+            stock: productStock,
+            category_id: category,
+            status,
+            images,
+        })
+
+        if (!validation.success) {
+            setFieldErrors(getFieldErrors(validation.error))
+            console.log(validation)
+            return
+        }
+
+        setFieldErrors({})
+
+        const data = validation.data
+
+        const newProduct: ProductCreate = {
+            category_id: Number(data.category_id),
+            title: data.title,
+            description: data.description ?? "",
+            price: data.price,
+            is_visible: data.status === "active",
+            stock: data.stock,
+            images: data.images.map((image, index) => ({
                 url: image,
                 product_id: 0,
                 is_cover: index === 0,
             })),
         }
 
-        console.log(newProduct)
-
         try {
-            const product = await createProduct(newProduct)
-
-            console.log("Produto criado:", product)
+            await createProduct(newProduct)
         } catch (error) {
             console.error("Erro ao criar produto:", error)
+            // idealmente: setar um erro genérico de submit pro usuário ver
         }
     }
 
@@ -103,6 +132,7 @@ export default function CreateProductPage() {
                                 placeholder="Exemplo: Camiseta 100% algodão"
                                 value={productTitle}
                                 onChange={setProductTitle}
+                                error={fieldErrors.title}
                             />
 
                             <FieldRichTextEditor
@@ -123,6 +153,7 @@ export default function CreateProductPage() {
                                     placeholder="R$ 10,00"
                                     value={productPrice}
                                     onChange={setProductPrice}
+                                    error={fieldErrors.price}
                                 />
                             </div>
 
@@ -134,6 +165,7 @@ export default function CreateProductPage() {
                                     mode="integer"
                                     value={productStock}
                                     onChange={setProductStock}
+                                    error={fieldErrors.stock}
                                 />
                             </div>
                         </div>
@@ -186,6 +218,7 @@ export default function CreateProductPage() {
                                 label="Imagens"
                                 images={images}
                                 isDisabled={images.length === MAX_IMAGES}
+                                error={fieldErrors.images}
                                 handleRemoveImage={handleRemoveImage}
                                 handleAddImages={handleSetImages}
                             />
