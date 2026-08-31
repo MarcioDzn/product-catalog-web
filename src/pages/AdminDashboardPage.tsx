@@ -106,6 +106,7 @@ export default function AdminDashboardPage() {
         setStockFilter(newStock);
     }
 
+
     const {
         data: products = [],
         isLoading,
@@ -167,7 +168,7 @@ export default function AdminDashboardPage() {
                     <Button
                         type="button"
                         text="Adicionar produto"
-                        onClick={() => console.log("Criar novo produto")}
+                        onClick={() => navigate("/admin/products/new")}
                     />
                 </div>
 

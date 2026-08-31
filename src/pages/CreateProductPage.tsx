@@ -10,6 +10,7 @@ import { useQuery } from "@tanstack/react-query";
 import { createProduct } from "../services/products";
 import { productSchema } from "../schemas/productSchema";
 import type z from "zod";
+import { useNavigate } from "react-router-dom";
 
 const MAX_IMAGES = 25
 
@@ -23,6 +24,8 @@ export default function CreateProductPage() {
     const [images, setImages] = useState<string[]>([])
 
     const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
+
+    const navigate = useNavigate();
 
     function handleSetImages(newImages: string[]) {
         const selectedImages = newImages.slice(0, MAX_IMAGES - images.length)
@@ -110,10 +113,31 @@ export default function CreateProductPage() {
         <main>
             <form onSubmit={handleCreateProduct}>
                 <div className="flex justify-between items-center mb-4">
-                    <div className="w-full">
-                        <h1 className="text-2xl font-bold text-gray-900">Adicionar novo produto</h1>
-                        <p className="text-sm text-gray-500 mt-1">Preencha as informações para cadastrar um produto na loja.</p>
+                    <div className="flex items-center w-full gap-4">
+                        <Button 
+                            className="border border-gray-400 p-1 rounded-md cursor-pointer text-black bg-white hover:bg-gray-100"
+                            onClick={() => navigate(-1)}
+                        >
+                            <svg 
+                                xmlns="http://www.w3.org/2000/svg" 
+                                fill="none" 
+                                viewBox="0 0 24 24"
+                                strokeWidth={1.5} 
+                                stroke="currentColor" 
+                                className="size-6"
+                            >
+                                <path 
+                                    strokeLinecap="round" 
+                                    strokeLinejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" 
+                                />
+                            </svg>
+                        </Button>
+                        <div className="w-full">
+                            <h1 className="text-2xl font-bold text-gray-900">Adicionar novo produto</h1>
+                            {/* <p className="text-sm text-gray-500 mt-1">Preencha as informações para cadastrar um produto na loja.</p> */}
+                        </div>
                     </div>
+
                     <div className="w-full flex items-center justify-end">
                         <Button
                             type="submit"

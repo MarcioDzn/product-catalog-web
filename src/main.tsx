@@ -23,12 +23,12 @@ createRoot(document.getElementById('root')!).render(
               />
 
               <Route
-                path="/admin"
+                path="/admin/products"
                 element={<AdminDashboardPage />}
               />
 
               <Route
-                path="/admin/product"
+                path="/admin/products/new"
                 element={<CreateProductPage />}
               />
             </Route>
