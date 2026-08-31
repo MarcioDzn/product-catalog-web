@@ -39,7 +39,7 @@ export default function ProductCardAdminList({
             params.delete('search'); 
         }
 
-        navigate(`/admin?${params.toString()}`);
+        navigate(`/admin/products?${params.toString()}`);
     }
 
     const [selectedProducts, setSelectedProducts] = useState<Set<number>>(

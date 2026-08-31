@@ -6,7 +6,7 @@ import FieldSelect from "../components/select/FieldSelect";
 import Button from "../components/Button";
 import type { ProductCreate } from "../types/Products";
 import { getCategories } from "../services/categories";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { createProduct } from "../services/products";
 import { productSchema } from "../schemas/productSchema";
 import type z from "zod";
@@ -46,6 +46,13 @@ export default function CreateProductPage() {
         queryKey: ["categories"],
         queryFn: () => getCategories(),
     });
+
+    const createProductMutation = useMutation({
+        mutationFn: createProduct,
+        onError: (error) => {
+            console.error("Erro ao criar produto:", error)
+        },
+    })
 
     function getFieldErrors(error: z.ZodError): Record<string, string> {
         const errors: Record<string, string> = {}
@@ -95,12 +102,7 @@ export default function CreateProductPage() {
             })),
         }
 
-        try {
-            await createProduct(newProduct)
-        } catch (error) {
-            console.error("Erro ao criar produto:", error)
-            // idealmente: setar um erro genérico de submit pro usuário ver
-        }
+        createProductMutation.mutate(newProduct)
     }
 
     useEffect(() => {
@@ -130,7 +132,7 @@ export default function CreateProductPage() {
                                     strokeLinecap="round" 
                                     strokeLinejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" 
                                 />
-                            </svg>
+                            </svg> 
                         </Button>
                         <div className="w-full">
                             <h1 className="text-2xl font-bold text-gray-900">Adicionar novo produto</h1>
@@ -141,9 +143,20 @@ export default function CreateProductPage() {
                     <div className="w-full flex items-center justify-end">
                         <Button
                             type="submit"
-                            text="Adicionar produto"
                             onClick={() => console.log("Criar novo produto")}
-                        />
+                        >
+                            {
+                                createProductMutation.isPending ? 
+                                <span className="flex items-center justify-center gap-2">
+                                    <span className="size-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
+                                </span>
+                                :
+                                <>Adicionar produto</>
+
+                            }
+                        </Button>
+
+
                     </div>
                 </div>
 
