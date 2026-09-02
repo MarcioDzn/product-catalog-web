@@ -12,13 +12,15 @@ type Props = {
     maxProductsPerPage: number
     currentPage: number
     onPageChange: (page: number) => void
+    onProductClick: (id: number) => void
 }
 
 export default function ProductCardAdminList({ 
     products, 
     maxProductsPerPage, 
     currentPage,
-    onPageChange 
+    onPageChange,
+    onProductClick 
 }: Props) {
     const [sort, setSort] = useState(1);
     const [search, setSearch] = useState("")
@@ -154,6 +156,7 @@ export default function ProductCardAdminList({
                                 image={product.images.find((image) => image.is_cover)}
                                 selectedProducts={selectedProducts}
                                 toggleProduct={toggleProduct}
+                                onClick={onProductClick}
                             />
                         ))}
                     </div>

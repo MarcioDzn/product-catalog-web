@@ -13,6 +13,7 @@ type Props = {
     category: string;
     stock: number;
     toggleProduct: (id: number) => void;
+    onClick: (id: number) => void;
 };
 
 export default function ProductCardAdmin({
@@ -24,10 +25,14 @@ export default function ProductCardAdmin({
     selectedProducts,
     category,
     stock,
-    toggleProduct
+    toggleProduct,
+    onClick
 }: Props) {
     return (
-        <div className="flex h-fit w-full flex-row items-center gap-4 border-b border-gray-200 bg-white p-4 transition-colors hover:bg-gray-50 cursor-pointer">
+        <div 
+            className="flex h-fit w-full flex-row items-center gap-4 border-b border-gray-200 bg-white p-4 transition-colors hover:bg-gray-50 cursor-pointer"
+            onClick={() => onClick(id)}
+        >
             
             {/* Checkbox */}
             <div 

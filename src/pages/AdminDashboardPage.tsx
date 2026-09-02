@@ -85,6 +85,10 @@ export default function AdminDashboardPage() {
         });
     };
 
+    const handleProductClick = (product_id: number) => {
+        navigate(String(product_id))
+    };
+
     const handleSortChange = (
         e: ChangeEvent<HTMLSelectElement>,
         value: string
@@ -125,7 +129,6 @@ export default function AdminDashboardPage() {
             ),
     });
 
-    console.log(categoryIds)
     const {
         data: categories = [],
         isLoading: isLoadingCategory,
@@ -261,6 +264,7 @@ export default function AdminDashboardPage() {
                         maxProductsPerPage={6}
                         currentPage={page}
                         onPageChange={handlePageChange}
+                        onProductClick={handleProductClick}
                     />
                 </div>
             </div>
