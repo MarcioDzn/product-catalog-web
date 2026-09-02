@@ -1,6 +1,6 @@
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
-import { getProducts } from "../services/products";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { deleteProduct, getProducts } from "../services/products";
 import ProductCardAdminList from "../components/ProductCardAdminList";
 import Button from "../components/Button";
 import { useEffect, useState, type ChangeEvent } from "react";
@@ -28,6 +28,7 @@ const MAX_STOCK = 200;
 
 export default function AdminDashboardPage() {
     const [searchParams, setSearchParams] = useSearchParams();
+    const queryClient = useQueryClient(); // 2. Instancie o client
 
     const search = searchParams.get("search") ?? "";
     const categoryIds = searchParams.getAll("category_id");
@@ -85,9 +86,7 @@ export default function AdminDashboardPage() {
         });
     };
 
-    const handleProductClick = (product_id: number) => {
-        navigate(String(product_id))
-    };
+
 
     const handleSortChange = (
         e: ChangeEvent<HTMLSelectElement>,
@@ -138,6 +137,16 @@ export default function AdminDashboardPage() {
         queryFn: () => getCategories(search),
     });
 
+    const deleteProductMutation = useMutation({
+        mutationFn: deleteProduct,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["products"] });
+        },
+        onError: (error) => {
+            console.error("Erro ao remover produto:", error)
+        },
+    })
+
     if (isLoading) {
         return <p>Carregando produtos...</p>;
     }
@@ -145,6 +154,17 @@ export default function AdminDashboardPage() {
     if (isError) {
         return <p>Erro ao carregar produtos.</p>;
     }
+
+
+
+    const handleProductDeleteClick = (product_id: number) => {
+        console.log(product_id)
+        deleteProductMutation.mutate(product_id)
+    };
+
+    const handleProductUpdateClick = (product_id: number) => {
+        navigate(String(product_id))
+    };
 
     const handleCategorySelect = (categoryId: number) => {
         const params = new URLSearchParams(searchParams)
@@ -264,7 +284,8 @@ export default function AdminDashboardPage() {
                         maxProductsPerPage={6}
                         currentPage={page}
                         onPageChange={handlePageChange}
-                        onProductClick={handleProductClick}
+                        onDeleteClick={handleProductDeleteClick}
+                        onUpdateClick={handleProductUpdateClick}
                     />
                 </div>
             </div>

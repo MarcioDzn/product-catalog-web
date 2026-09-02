@@ -93,3 +93,25 @@ export async function updateProduct(
 
     return response.json()
 }
+
+export async function deleteProduct(
+    id: number,
+): Promise<Product> {
+    const response = await fetch("http://localhost:8000/products/"+id, {
+        method: "DELETE",
+        headers: {
+            "Content-Type": "application/json",
+        }
+    })
+
+    if (!response.ok) {
+        const error = await response.text()
+
+        console.error("STATUS:", response.status)
+        console.error("ERRO DA API:", error)
+
+        throw new Error(`Erro ao editar produto: ${response.status}`)
+    }
+
+    return response.json()
+}

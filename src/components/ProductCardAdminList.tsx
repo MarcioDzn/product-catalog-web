@@ -12,7 +12,8 @@ type Props = {
     maxProductsPerPage: number
     currentPage: number
     onPageChange: (page: number) => void
-    onProductClick: (id: number) => void
+    onDeleteClick: (id: number) => void
+    onUpdateClick: (id: number) => void
 }
 
 export default function ProductCardAdminList({ 
@@ -20,7 +21,8 @@ export default function ProductCardAdminList({
     maxProductsPerPage, 
     currentPage,
     onPageChange,
-    onProductClick 
+    onDeleteClick, 
+    onUpdateClick 
 }: Props) {
     const [sort, setSort] = useState(1);
     const [search, setSearch] = useState("")
@@ -87,7 +89,7 @@ export default function ProductCardAdminList({
 
     return (
         <div className="w-full">
-            <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white">
+            <div className="rounded-2xl border border-gray-200 bg-white">
                 {/* Toolbar */}
                 <div className="flex items-center justify-between border-b border-gray-100 px-4 py-3">
                     <div className="flex items-center gap-3 py-2">
@@ -111,28 +113,6 @@ export default function ProductCardAdminList({
                             placeholder="Buscar produtos..." 
                             onChange={setSearch} 
                             handleSearch={handleSearch}/>
-
-
-                        {/* <Select
-                            value={sort}
-                            options={[
-                                {
-                                    value: 1,
-                                    text: "Mais recentes"
-                                },
-                                {
-                                    value: 2,
-                                    text: "Maior preço"
-                                },
-                                {
-                                    value: 3,
-                                    text: "Menor Preço"
-                                },
-
-                            ]}
-                            onChange={setSort}
-                        /> */}
-
                     </div>
 
                 </div>
@@ -156,7 +136,8 @@ export default function ProductCardAdminList({
                                 image={product.images.find((image) => image.is_cover)}
                                 selectedProducts={selectedProducts}
                                 toggleProduct={toggleProduct}
-                                onClick={onProductClick}
+                                onDeleteClick={onDeleteClick}
+                                onUpdateClick={onUpdateClick}
                             />
                         ))}
                     </div>
