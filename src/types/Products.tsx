@@ -19,18 +19,18 @@ export type Product = {
     price: number;
 }
 
-export interface ProductImageCreate {
+export interface ProductImageFormData {
   url: string;
   product_id: number;
   is_cover?: boolean;
 }
 
-export interface ProductCreate {
+export interface ProductFormData {
   category_id: number;
   title: string;
   description?: string | null;
   price: number;
   is_visible?: boolean;
   stock?: number;
-  images?: ProductImageCreate[];
+  images?: ProductImageFormData[];
 }

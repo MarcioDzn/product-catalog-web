@@ -4,18 +4,18 @@ import FieldRichTextEditor from "../components/richText/FieldRichTextEditor";
 import FieldImagePicker from "../components/imagePicker/FieldImagePicker";
 import FieldSelect from "../components/select/FieldSelect";
 import Button from "../components/Button";
-import type { ProductCreate } from "../types/Products";
+import type { ProductFormData } from "../types/Products";
 import { getCategories } from "../services/categories";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { createProduct } from "../services/products";
+import { createProduct, getProductById, updateProduct } from "../services/products";
 import { productSchema } from "../schemas/productSchema";
 import type z from "zod";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { PageActionContext } from "../context/PageActionContext";
 
 const MAX_IMAGES = 25
 
-export default function CreateProductPage() {
+export default function ProductFormPage() {
     const { setPageAction } = useContext(PageActionContext);
     
     const [productTitle, setProductTitle] = useState("")
@@ -29,6 +29,10 @@ export default function CreateProductPage() {
     const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
 
     const navigate = useNavigate();
+
+    const { id } = useParams<{ id: string }>();
+    const isEditing = Boolean(id);
+
 
     function handleSetImages(newImages: string[]) {
         const selectedImages = newImages.slice(0, MAX_IMAGES - images.length)
@@ -50,6 +54,16 @@ export default function CreateProductPage() {
         queryFn: () => getCategories(),
     });
 
+    const {
+        data: product,
+        isLoading: isLoadingProduct,
+        isError: isErrorProduct,
+    } = useQuery({
+        queryKey: ["product", id],
+        queryFn: () => getProductById(Number(id)),
+        enabled: isEditing,
+    });
+
     const createProductMutation = useMutation({
         mutationFn: createProduct,
         onError: (error) => {
@@ -57,15 +71,50 @@ export default function CreateProductPage() {
         },
     })
 
+    const updateProductMutation = useMutation({
+        mutationFn: (data: ProductFormData) => updateProduct(Number(id), data),
+        onError: (error) => {
+            console.error("Erro ao editar produto:", error)
+        },
+    })
+
+    const isPending = isEditing 
+        ? updateProductMutation.isPending 
+        : createProductMutation.isPending;
+
     useEffect(() => {
         setPageAction({
             label: "Salvar",
-            formId: "create-product-form",
-            isPending: createProductMutation.isPending,
+            formId: "product-form",
+            isPending: isPending,
         });
 
         return () => setPageAction(null);
-    }, [createProductMutation.isPending, setPageAction]);
+    }, [isPending, setPageAction]);
+
+    useEffect(() => {
+        if (product) {
+            setProductTitle(product.title);
+            setProductPrice(String(product.price));
+            setProductStock(String(product.stock));
+            setDescription(product.description || "");
+            setCategory(String(product.category.id));
+            setStatus("active");
+            setImages(product.images?.map((img) => img.url) || []);
+        }
+    }, [product]);
+
+    useEffect(() => {
+        if (categories.length > 0 && !category) {
+            setCategory(String(categories[0].id));
+        }
+    }, [categories, category]);
+
+    if (isErrorProduct) {
+        return (
+            <p>Produto não encontrado</p>
+        )
+    }
 
     function getFieldErrors(error: z.ZodError): Record<string, string> {
         const errors: Record<string, string> = {}
@@ -101,7 +150,7 @@ export default function CreateProductPage() {
 
         const data = validation.data
 
-        const newProduct: ProductCreate = {
+        const payload: ProductFormData = {
             category_id: Number(data.category_id),
             title: data.title,
             description: data.description ?? "",
@@ -115,22 +164,21 @@ export default function CreateProductPage() {
             })),
         }
 
-        createProductMutation.mutate(newProduct)
-    }
-
-    useEffect(() => {
-        if (categories.length > 0 && !category) {
-            setCategory(String(categories[0].id));
+        if (isEditing) {
+            updateProductMutation.mutate(payload);
+        } else {
+            createProductMutation.mutate(payload);
         }
-    }, [categories, category]);
+    }
 
     return (
         <main>
-            <form id="create-product-form" onSubmit={handleCreateProduct}>
+            <form id="product-form" onSubmit={handleCreateProduct}>
                 <div className="flex justify-between items-center mb-4">
                     <div className="flex items-center w-full gap-4">
                         <Button 
                             className="border border-gray-400 p-1 rounded-md cursor-pointer text-black bg-white hover:bg-gray-100"
+                            type="button"
                             onClick={() => navigate(-1)}
                         >
                             <svg 

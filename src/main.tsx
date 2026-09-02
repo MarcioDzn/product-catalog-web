@@ -9,11 +9,10 @@ import { QueryClientProvider } from '@tanstack/react-query';
 import { queryClient } from './lib/QueryClient.ts';
 import AppLayout from './components/AppLayout.tsx';
 import AdminDashboardPage from './pages/AdminDashboardPage.tsx';
-import CreateProductPage from './pages/CreateProductPage.tsx';
 import SearchNavbar from './components/navbar/SearchNavbar.tsx';
 import ActionNavbar from './components/navbar/ActionNavbar.tsx';
-import { PageActionProvider } from './context/PageActionContext.tsx';
 import PageActionProviderLayout from './components/layouts/PageActionProviderLayout.tsx';
+import ProductFormPage from './pages/ProductFormPage.tsx';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -43,7 +42,11 @@ createRoot(document.getElementById('root')!).render(
                 <Route element={<AppLayout />}>
                   <Route
                     path="/admin/products/new"
-                    element={<CreateProductPage />}
+                    element={<ProductFormPage />}
+                  />
+                  <Route
+                    path="/admin/products/:id"
+                    element={<ProductFormPage />}
                   />
                 </Route>        
               </Route>

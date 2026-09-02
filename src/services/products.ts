@@ -1,4 +1,4 @@
-import type { Product, ProductCreate } from "../types/Products";
+import type { Product, ProductFormData } from "../types/Products";
 
 
 export async function getProducts(
@@ -32,7 +32,22 @@ export async function getProducts(
     return response.json()
 }
 
-export async function createProduct(data: ProductCreate): Promise<Product> {
+export async function getProductById(
+    id: number
+): Promise<Product> {
+    const url = 
+        "http://localhost:8000/products/" + id;
+
+    const response = await fetch(url)
+
+    if (!response.ok) {
+        throw new Error("Erro ao buscar produto")
+    }
+
+    return response.json()
+}
+
+export async function createProduct(data: ProductFormData): Promise<Product> {
     const response = await fetch("http://localhost:8000/products/", {
         method: "POST",
         headers: {
@@ -49,6 +64,31 @@ export async function createProduct(data: ProductCreate): Promise<Product> {
         console.error("DADOS ENVIADOS:", data)
 
         throw new Error(`Erro ao criar produto: ${response.status}`)
+    }
+
+    return response.json()
+}
+
+export async function updateProduct(
+    id: number,
+    data: ProductFormData
+): Promise<Product> {
+    const response = await fetch("http://localhost:8000/products/"+id, {
+        method: "PATCH",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+    })
+
+    if (!response.ok) {
+        const error = await response.text()
+
+        console.error("STATUS:", response.status)
+        console.error("ERRO DA API:", error)
+        console.error("DADOS ENVIADOS:", data)
+
+        throw new Error(`Erro ao editar produto: ${response.status}`)
     }
 
     return response.json()
