@@ -196,7 +196,7 @@ export default function ProductFormPage() {
                             </svg> 
                         </Button>
                         <div className="w-full">
-                            <h1 className="text-2xl font-bold text-gray-900">Adicionar novo produto</h1>
+                            <h1 className="text-2xl font-bold text-gray-900">{`${isEditing ? "Editar produto" : "Adicionar novo produto"}`}</h1>
                         </div>
                     </div>
                 </div>
