@@ -6,6 +6,8 @@ type Props = {
     children?: ReactNode
     type?: "button" | "submit"
     className?: string
+    formId?: string
+    disabled?: boolean
     onClick: MouseEventHandler<HTMLButtonElement>
 }
 
@@ -14,12 +16,16 @@ export default function Button({
     children, 
     type = "button", 
     className, 
+    formId,
+    disabled,
     onClick 
 }: Props) {
     return (
         <button 
             type={type}
             onClick={onClick}
+            form={formId}
+            disabled={disabled}
             className={twMerge(
                 "border border-transparent cursor-pointer bg-black py-2.5 px-4 font-medium text-white rounded-lg text-sm hover:bg-gray-700",
                 className

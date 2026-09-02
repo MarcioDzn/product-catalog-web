@@ -1,4 +1,4 @@
-import { useEffect, useState, type ChangeEvent } from "react";
+import { useContext, useEffect, useState, type ChangeEvent } from "react";
 import FieldInput from "../components/FieldInput";
 import FieldRichTextEditor from "../components/richText/FieldRichTextEditor";
 import FieldImagePicker from "../components/imagePicker/FieldImagePicker";
@@ -11,10 +11,13 @@ import { createProduct } from "../services/products";
 import { productSchema } from "../schemas/productSchema";
 import type z from "zod";
 import { useNavigate } from "react-router-dom";
+import { PageActionContext } from "../context/PageActionContext";
 
 const MAX_IMAGES = 25
 
 export default function CreateProductPage() {
+    const { setPageAction } = useContext(PageActionContext);
+    
     const [productTitle, setProductTitle] = useState("")
     const [productPrice, setProductPrice] = useState("")
     const [productStock, setProductStock] = useState("1")
@@ -53,6 +56,16 @@ export default function CreateProductPage() {
             console.error("Erro ao criar produto:", error)
         },
     })
+
+    useEffect(() => {
+        setPageAction({
+            label: "Adicionar produto",
+            formId: "create-product-form",
+            isPending: createProductMutation.isPending,
+        });
+
+        return () => setPageAction(null);
+    }, [createProductMutation.isPending, setPageAction]);
 
     function getFieldErrors(error: z.ZodError): Record<string, string> {
         const errors: Record<string, string> = {}
@@ -113,7 +126,7 @@ export default function CreateProductPage() {
 
     return (
         <main>
-            <form onSubmit={handleCreateProduct}>
+            <form id="create-product-form" onSubmit={handleCreateProduct}>
                 <div className="flex justify-between items-center mb-4">
                     <div className="flex items-center w-full gap-4">
                         <Button 
@@ -136,27 +149,7 @@ export default function CreateProductPage() {
                         </Button>
                         <div className="w-full">
                             <h1 className="text-2xl font-bold text-gray-900">Adicionar novo produto</h1>
-                            {/* <p className="text-sm text-gray-500 mt-1">Preencha as informações para cadastrar um produto na loja.</p> */}
                         </div>
-                    </div>
-
-                    <div className="w-full flex items-center justify-end">
-                        <Button
-                            type="submit"
-                            onClick={() => console.log("Criar novo produto")}
-                        >
-                            {
-                                createProductMutation.isPending ? 
-                                <span className="flex items-center justify-center gap-2">
-                                    <span className="size-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
-                                </span>
-                                :
-                                <>Adicionar produto</>
-
-                            }
-                        </Button>
-
-
                     </div>
                 </div>
 
