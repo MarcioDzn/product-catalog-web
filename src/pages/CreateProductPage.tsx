@@ -59,7 +59,7 @@ export default function CreateProductPage() {
 
     useEffect(() => {
         setPageAction({
-            label: "Adicionar produto",
+            label: "Salvar",
             formId: "create-product-form",
             isPending: createProductMutation.isPending,
         });

@@ -10,22 +10,25 @@ export default function ActionNavbar() {
     return (
         <>
             <Navbar>
-                {action && (
-                    <Button
-                        type="submit"
-                        formId={action.formId}
-                        disabled={action.isPending || action.disabled}
-                        onClick={() => console.log("Criar produto")}
-                    >
-                        {action.isPending ? (
-                            <span className="flex items-center justify-center gap-2">
-                                <span className="size-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
-                            </span>
-                        ) : (
-                            action.label
-                        )}
-                    </Button>
-                )}
+                <div className="flex justify-end w-full">
+                    {action && (
+                        <Button
+                            type="submit"
+                            formId={action.formId}
+                            disabled={action.isPending || action.disabled}
+                            onClick={() => {}}
+                        >
+                            {action.isPending ? (
+                                <span className="flex items-center justify-center gap-2">
+                                    <span className="size-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
+                                </span>
+                            ) : (
+                                action.label
+                            )}
+                        </Button>
+                    )}
+                </div>
+
 
             </Navbar>
         </>

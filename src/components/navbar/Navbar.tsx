@@ -18,7 +18,7 @@ export default function Navbar({ children }: Props) {
     return (
         <>
             <nav className="sticky top-0 z-50 w-full h-20 border-b border-gray-300 bg-white">
-                <div className="w-full h-full flex justify-between items-center px-8">
+                <div className="w-full h-full flex justify-between items-center gap-4 px-8">
                     <div>
                         <span className="font-extrabold text-xl">
                             CatalogWeb
