@@ -170,7 +170,6 @@ export default function AdminDashboardPage() {
 
 
     const handleProductDeleteClick = (product_id: number) => {
-        console.log(product_id)
         deleteProductMutation.mutate(product_id)
     };
 

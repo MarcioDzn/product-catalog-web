@@ -38,7 +38,6 @@ export default function ProductFormPage() {
 
     function handleSetImages(newImages: ProductImage[]) {
         const selectedImages = newImages.slice(0, MAX_IMAGES - images.length);
-        console.log(selectedImages.length);
         
         setImages(prev => [...prev, ...selectedImages]);
     }
@@ -152,7 +151,6 @@ export default function ProductFormPage() {
 
         if (!validation.success) {
             setFieldErrors(getFieldErrors(validation.error))
-            console.log(validation)
             return
         }
 
@@ -181,7 +179,6 @@ export default function ProductFormPage() {
         }
     }
 
-    console.log(images)
     return (
         <main>
             <form id="product-form" onSubmit={handleCreateProduct}>
