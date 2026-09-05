@@ -13,6 +13,8 @@ import type z from "zod";
 import { useNavigate, useParams } from "react-router-dom";
 import { PageActionContext } from "../context/PageActionContext";
 
+import toast from "react-hot-toast";
+
 const MAX_IMAGES = 25
 
 export default function ProductFormPage() {
@@ -66,6 +68,9 @@ export default function ProductFormPage() {
 
     const createProductMutation = useMutation({
         mutationFn: createProduct,
+        onSuccess: () => {
+            toast.success("Produto criado com sucesso!");
+        },
         onError: (error) => {
             console.error("Erro ao criar produto:", error)
         },

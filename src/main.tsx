@@ -13,11 +13,14 @@ import SearchNavbar from './components/navbar/SearchNavbar.tsx';
 import ActionNavbar from './components/navbar/ActionNavbar.tsx';
 import PageActionProviderLayout from './components/layouts/PageActionProviderLayout.tsx';
 import ProductFormPage from './pages/ProductFormPage.tsx';
+import { Toaster } from 'react-hot-toast';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
+          <Toaster position="bottom-right" />
+
           <Routes>
 
             <Route element={<SearchNavbar />}>
