@@ -4,7 +4,7 @@ import FieldRichTextEditor from "../components/richText/FieldRichTextEditor";
 import FieldImagePicker from "../components/imagePicker/FieldImagePicker";
 import FieldSelect from "../components/select/FieldSelect";
 import Button from "../components/Button";
-import type { ProductFormData } from "../types/Products";
+import type { ProductFormData, ProductImage, ProductImageFormData } from "../types/Products";
 import { getCategories } from "../services/categories";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { createProduct, getProductById, updateProduct } from "../services/products";
@@ -24,7 +24,7 @@ export default function ProductFormPage() {
     const [description, setDescription] = useState("")
     const [category, setCategory] = useState("");
     const [status, setStatus] = useState("active");
-    const [images, setImages] = useState<string[]>([])
+    const [images, setImages] = useState<ProductImage[]>([])
 
     const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
 
@@ -34,11 +34,11 @@ export default function ProductFormPage() {
     const isEditing = Boolean(id);
 
 
-    function handleSetImages(newImages: string[]) {
-        const selectedImages = newImages.slice(0, MAX_IMAGES - images.length)
-        console.log(selectedImages.length)
-
-        setImages(prev => [...prev, ...selectedImages])
+    function handleSetImages(newImages: ProductImage[]) {
+        const selectedImages = newImages.slice(0, MAX_IMAGES - images.length);
+        console.log(selectedImages.length);
+        
+        setImages(prev => [...prev, ...selectedImages]);
     }
 
     function handleRemoveImage(index: number) {
@@ -100,7 +100,11 @@ export default function ProductFormPage() {
             setDescription(product.description || "");
             setCategory(String(product.category.id));
             setStatus("active");
-            setImages(product.images?.map((img) => img.url) || []);
+            setImages(product.images?.map((img) => ({
+                id: img.id,
+                url: img.url,
+                is_cover: img.is_cover
+            })) || []);
         }
     }, [product]);
 
@@ -158,7 +162,7 @@ export default function ProductFormPage() {
             is_visible: data.status === "active",
             stock: data.stock,
             images: data.images.map((image, index) => ({
-                url: image,
+                url: image.url,
                 product_id: 0,
                 is_cover: index === 0,
             })),
@@ -171,6 +175,7 @@ export default function ProductFormPage() {
         }
     }
 
+    console.log(images)
     return (
         <main>
             <form id="product-form" onSubmit={handleCreateProduct}>

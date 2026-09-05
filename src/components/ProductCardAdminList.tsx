@@ -11,6 +11,7 @@ type Props = {
     products: Product[]
     maxProductsPerPage: number
     currentPage: number
+    pageQuantity: number
     onPageChange: (page: number) => void
     onDeleteClick: (id: number) => void
     onUpdateClick: (id: number) => void
@@ -20,6 +21,7 @@ export default function ProductCardAdminList({
     products, 
     maxProductsPerPage, 
     currentPage,
+    pageQuantity,
     onPageChange,
     onDeleteClick, 
     onUpdateClick 
@@ -147,7 +149,7 @@ export default function ProductCardAdminList({
             {/* Paginação */}
             <div className="mt-4 flex w-full justify-center">
                 <Pagination
-                    pageQuantity={10}
+                    pageQuantity={pageQuantity}
                     maxVisiblePages={5}
                     currentPage={currentPage}
                     onPageChange={onPageChange}

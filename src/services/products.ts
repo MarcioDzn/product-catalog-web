@@ -1,4 +1,4 @@
-import type { Product, ProductFormData } from "../types/Products";
+import type { Product, ProductFormData, ProductResponse } from "../types/Products";
 
 
 export async function getProducts(
@@ -9,7 +9,7 @@ export async function getProducts(
     sort: string,
     page: number,
     pageSize: number
-): Promise<Product[]> {
+): Promise<ProductResponse> {
     const url = 
         "http://localhost:8000/products?title=" + search + 
         "&page=" + page + 

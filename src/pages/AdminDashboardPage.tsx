@@ -6,11 +6,10 @@ import Button from "../components/Button";
 import { useEffect, useState, type ChangeEvent } from "react";
 import { getCategories } from "../services/categories";
 import Accordion from "../components/accordion/Accordion";
-import Slider from '@mui/material/Slider';
-import RangeSlider from "../components/slider/FieldRangeSlider";
 import FieldRangeSlider from "../components/slider/FieldRangeSlider";
 import { formatCurrency } from "../utils/money";
 import Select from "../components/select/Select";
+import type { Product } from "../types/Products";
 
 function pricetext(price: number) {
   return `R$${price}`;
@@ -26,9 +25,11 @@ const MAX_PRICE = 10000;
 const MIN_STOCK = 0;
 const MAX_STOCK = 200;
 
+const ITEMS_PER_PAGE = 6
+
 export default function AdminDashboardPage() {
     const [searchParams, setSearchParams] = useSearchParams();
-    const queryClient = useQueryClient(); // 2. Instancie o client
+    const queryClient = useQueryClient(); 
 
     const search = searchParams.get("search") ?? "";
     const categoryIds = searchParams.getAll("category_id");
@@ -111,7 +112,7 @@ export default function AdminDashboardPage() {
 
 
     const {
-        data: products = [],
+        data: products,
         isLoading,
         isError,
     } = useQuery({
@@ -124,7 +125,7 @@ export default function AdminDashboardPage() {
                 stock,
                 currentSortFilter,
                 page, 
-                6
+                ITEMS_PER_PAGE
             ),
     });
 
@@ -136,6 +137,17 @@ export default function AdminDashboardPage() {
         queryKey: ["categories", search],
         queryFn: () => getCategories(search),
     });
+
+    useEffect(() => {
+        if (!products) return;
+
+        if (page > products.total_pages && products.total_pages > 0) {
+            setSearchParams((current) => {
+                current.set("page", String(products.total_pages));
+                return current;
+            });
+        }
+    }, [products, page, setSearchParams]);
 
     const deleteProductMutation = useMutation({
         mutationFn: deleteProduct,
@@ -280,9 +292,10 @@ export default function AdminDashboardPage() {
                     </div>
 
                     <ProductCardAdminList 
-                        products={products}
-                        maxProductsPerPage={6}
+                        products={products ? products?.products : [] as Product[]}
+                        maxProductsPerPage={ITEMS_PER_PAGE}
                         currentPage={page}
+                        pageQuantity={products ? products?.total_pages : 0}
                         onPageChange={handlePageChange}
                         onDeleteClick={handleProductDeleteClick}
                         onUpdateClick={handleProductUpdateClick}

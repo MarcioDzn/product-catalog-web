@@ -19,7 +19,14 @@ export type Product = {
     price: number;
 }
 
+export type ProductResponse = {
+  total_pages: number
+  total_items: number
+  products: Product[]
+}
+
 export interface ProductImageFormData {
+  id?: number
   url: string;
   product_id: number;
   is_cover?: boolean;

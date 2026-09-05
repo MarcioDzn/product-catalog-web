@@ -28,8 +28,12 @@ export const productSchema = z.object({
     status: z
         .string()
         .min(1, "Selecione um status"),
-    images: z
-        .array(z.string())
+    images: z.array(
+        z.object({
+            id: z.number(),
+            url: z.string(),
+            is_cover: z.boolean(),
+        }))
         .min(1, "Adicione pelo menos 1 imagem do produto"),
 });
 

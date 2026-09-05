@@ -1,13 +1,14 @@
+import type { ProductImage } from "../../types/Products"
 import ImagePicker from "./ImagePicker"
 
 type Props = {
     id: string
     label: string
-    images: string[]
+    images: ProductImage[]
     isDisabled: boolean
     error: string
     handleRemoveImage: (index: number) => void
-    handleAddImages: (images: string[]) => void
+    handleAddImages: (images: ProductImage[]) => void
 }
 
 export default function FieldImagePicker({ 
@@ -32,13 +33,15 @@ export default function FieldImagePicker({
             </span>
 
             <div className="flex flex-col gap-4 h-full">
-                <div className="relative w-full aspect-square rounded-lg overflow-hidden bg-gray-100">
-                    <img
-                        src={images[0]}
-                        alt={`Imagem principal`}
-                        className="absolute inset-0 w-full h-full object-cover"
-                    />
-                </div>
+                {images.length > 0 && (
+                    <div className="relative w-full aspect-square rounded-lg overflow-hidden bg-gray-100">
+                        <img
+                            src={images[0].url}
+                            alt={`Imagem principal`}
+                            className="absolute inset-0 w-full h-full object-cover"
+                        />
+                    </div>
+                )}
 
                 <div className="
                     flex-1
@@ -46,7 +49,7 @@ export default function FieldImagePicker({
                     grid-cols-3
                     gap-3
                 ">
-                    {images.map((src, index) => (
+                    {images.map((image, index) => (
                         <div
                             className="group relative min-h-0 min-w-0 w-full aspect-square overflow-hidden rounded-lg bg-gray-100"
                             key={index}
@@ -75,7 +78,7 @@ export default function FieldImagePicker({
                                 </svg>
                             </button>
                             <img
-                                src={src}
+                                src={image.url}
                                 alt={`Imagem ${index + 1}`}
                                 className="absolute inset-0 w-full h-full object-cover"
                             />
@@ -87,7 +90,15 @@ export default function FieldImagePicker({
                             <ImagePicker
                                 description=""
                                 isDisabled={isDisabled}
-                                onChange={handleAddImages}
+                                onChange={(urls: string[]) => {
+                                    const newImagesObjects = urls.map(url => ({
+                                        id: 0, 
+                                        url: url,
+                                        is_cover: false
+                                    } as ProductImage));
+                                    
+                                    handleAddImages(newImagesObjects);
+                                }}
                             />
                         </div>
                     )}
