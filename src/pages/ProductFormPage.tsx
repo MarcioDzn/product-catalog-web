@@ -78,6 +78,9 @@ export default function ProductFormPage() {
 
     const updateProductMutation = useMutation({
         mutationFn: (data: ProductFormData) => updateProduct(Number(id), data),
+        onSuccess: () => {
+            toast.success("Produto editado com sucesso!");
+        },
         onError: (error) => {
             console.error("Erro ao editar produto:", error)
         },

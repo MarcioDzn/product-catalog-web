@@ -198,7 +198,17 @@ export default function AdminDashboardPage() {
     return (
         <main className="py-8">     
             <div className="flex flex-col">
-                <div className="w-full flex justify-end mb-4">
+                <div className="w-full flex justify-between items-center mb-4">
+                    <div>
+                        <h2 className="font-bold text-2xl">
+                            Produtos
+                        </h2>
+                        <p>
+                            {products?.total_items} produtos encontrados.
+                        </p>
+                    </div>
+
+
                     <Button
                         type="button"
                         text="Adicionar produto"
