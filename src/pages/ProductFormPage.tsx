@@ -68,8 +68,9 @@ export default function ProductFormPage() {
 
     const createProductMutation = useMutation({
         mutationFn: createProduct,
-        onSuccess: () => {
+        onSuccess: (product) => {
             toast.success("Produto criado com sucesso!");
+            navigate(`/admin/products/${product.id}`);
         },
         onError: (error) => {
             console.error("Erro ao criar produto:", error)
@@ -189,7 +190,7 @@ export default function ProductFormPage() {
                         <Button 
                             className="border border-gray-400 p-1 rounded-md cursor-pointer text-black bg-white hover:bg-gray-100"
                             type="button"
-                            onClick={() => navigate(-1)}
+                            onClick={() => navigate("/admin/products")}
                         >
                             <svg 
                                 xmlns="http://www.w3.org/2000/svg" 
