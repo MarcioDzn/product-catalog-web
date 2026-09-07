@@ -1,6 +1,5 @@
 import Slider from "@mui/material/Slider";
-import { useState, useCallback, useId } from "react";
-import { formatCurrency } from "../../utils/money";
+import { useId, useState, useEffect } from "react";
 import Input from "../Input";
 
 interface FieldRangeSliderProps { 
@@ -11,7 +10,9 @@ interface FieldRangeSliderProps {
   valuetext: (value: number) => string
   onChange: (e: Event, range: number[]) => void
   onApply: () => void;
-  valueFormatter?: (value: string) => string
+  valueFormatter?: (value: number) => string
+  valueParser?: (value: string) => number
+  maskInput?: (raw: string) => { text: string; numeric: number }
 }
 
 export default function FieldRangeSlider({
@@ -22,35 +23,94 @@ export default function FieldRangeSlider({
   valuetext, 
   onChange,
   onApply,
-  valueFormatter
+  valueFormatter,
+  valueParser,
+  maskInput
 }: FieldRangeSliderProps) {
+  const inputId = useId();
 
-  const handleChange = (
-    e: Event,
-    newValue: number | number[]
-  ) => {
+  const formatValue = (val: number) =>
+    valueFormatter ? valueFormatter(val) : String(val);
+
+  const parseValue = (raw: string) =>
+    valueParser ? valueParser(raw) : Number(raw);
+
+  const [minText, setMinText] = useState(
+    Array.isArray(value) ? formatValue(value[0]) : ""
+  );
+  const [maxText, setMaxText] = useState(
+    Array.isArray(value) ? formatValue(value[1]) : ""
+  );
+  const [minNumeric, setMinNumeric] = useState(
+    Array.isArray(value) ? value[0] : 0
+  );
+  const [maxNumeric, setMaxNumeric] = useState(
+    Array.isArray(value) ? value[1] : 0
+  );
+
+  useEffect(() => {
+    if (Array.isArray(value)) {
+      setMinText(formatValue(value[0]));
+      setMaxText(formatValue(value[1]));
+      setMinNumeric(value[0]);
+      setMaxNumeric(value[1]);
+    }
+  }, [Array.isArray(value) ? value[0] : null, Array.isArray(value) ? value[1] : null]);
+
+  const handleChange = (e: Event, newValue: number | number[]) => {
     if (Array.isArray(newValue)) {
       onChange(e, newValue);
     }
   };
 
-    const onHandleMinValueChange = (newMinValue: string) => {
-        if (Array.isArray(value)) {
-            onChange(
-                new Event("change"),
-                [Number(newMinValue), value[1]]
-            );
-        }
-    };
+  // filtra tudo que não é dígito
+  const defaultMask = (raw: string): { text: string; numeric: number } => {
+    const digitsOnly = raw.replace(/\D/g, "");
+    const numeric = digitsOnly ? Number(digitsOnly) : 0;
+    return { text: digitsOnly, numeric };
+  };
 
-    const onHandleMaxValueChange = (newMaxValue: string) => {
-        if (Array.isArray(value)) {
-            onChange(
-                new Event("change"),
-                [value[0], Number(newMaxValue)]
-            );
-        }
-    };
+  const applyMask = maskInput ?? defaultMask;
+
+  const handleMinInputChange = (raw: string) => {
+      if (valueParser) {
+        const { text, numeric } = applyMask(raw);
+        setMinText(text);
+        setMinNumeric(numeric);
+      } else {
+        const digitsOnly = raw.replace(/\D/g, "");
+        setMinText(digitsOnly);
+        setMinNumeric(digitsOnly ? Number(digitsOnly) : 0);
+      }
+  };
+
+  const handleMaxInputChange = (raw: string) => {
+      if (valueParser) {
+        const { text, numeric } = applyMask(raw);
+        setMaxText(text);
+        setMaxNumeric(numeric);
+      } else {
+        const digitsOnly = raw.replace(/\D/g, "");
+        setMaxText(digitsOnly);
+        setMaxNumeric(digitsOnly ? Number(digitsOnly) : 0);
+      }
+  };
+
+  const commitMin = () => {
+    if (Array.isArray(value)) {
+      const finalValue = valueParser ? minNumeric : parseValue(minText);
+      onChange(new Event("change"), [finalValue, value[1]]);
+    }
+    onApply();
+  };
+
+  const commitMax = () => {
+    if (Array.isArray(value)) {
+      const finalValue = valueParser ? maxNumeric : parseValue(maxText);
+      onChange(new Event("change"), [value[0], finalValue]);
+    }
+    onApply();
+  };
 
   return (
       <div className="flex flex-col gap-2 h-full">
@@ -65,45 +125,37 @@ export default function FieldRangeSlider({
           getAriaValueText={valuetext}
           min={min}
           max={max}
-          sx={{
-            color: '#000',
-          }}
+          sx={{ color: '#000' }}
         />
 
         {
           Array.isArray(value) &&
           <div className="flex flex-row justify-between gap-4 items-center">
               <Input 
-                id="min-value-input"
+                id={`${inputId}-min-value-input`}
                 placeholder="Valor mínimo"
-                value={valueFormatter ? valueFormatter(String(value[0])) : String(value[0])}
-                onChange={onHandleMinValueChange}
-                onBlur={onApply}
+                value={minText}
+                onChange={handleMinInputChange}
+                onBlur={commitMin}
                 onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                        onApply();
-                    }
+                    if (e.key === "Enter") commitMin();
                 }}
                 className="text-xs rounded-sm"
               />
 
               <Input 
-                id="min-value-input"
-                placeholder="Valor mínimo"
-                value={valueFormatter ? valueFormatter(String(value[1])) : String(value[1])}
-                onChange={onHandleMaxValueChange}
-                onBlur={onApply}
+                id={`${inputId}-max-value-input`}
+                placeholder="Valor máximo"
+                value={maxText}
+                onChange={handleMaxInputChange}
+                onBlur={commitMax}
                 onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                        onApply();
-                    }
+                    if (e.key === "Enter") commitMax();
                 }}
                 className="text-xs rounded-sm"
               />
           </div>
         }
-
     </div>
-
   )
 }

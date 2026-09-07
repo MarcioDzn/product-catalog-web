@@ -7,7 +7,7 @@ import { useEffect, useState, type ChangeEvent } from "react";
 import { getCategories } from "../services/categories";
 import Accordion from "../components/accordion/Accordion";
 import FieldRangeSlider from "../components/slider/FieldRangeSlider";
-import { formatCurrency } from "../utils/money";
+import { formatCurrency, maskCurrencyInput, parseCurrency } from "../utils/money";
 import Select from "../components/select/Select";
 import type { Product } from "../types/Products";
 
@@ -278,7 +278,9 @@ export default function AdminDashboardPage() {
                                 valuetext={pricetext}
                                 onChange={handlePriceFilter}
                                 onApply={applyPriceFilter}
-                                valueFormatter={(value: string) => formatCurrency(Number(value))}
+                                valueFormatter={formatCurrency}
+                                valueParser={parseCurrency} 
+                                maskInput={maskCurrencyInput}
                             />
                         </div>
 
