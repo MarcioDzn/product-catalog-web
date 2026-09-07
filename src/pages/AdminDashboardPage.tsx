@@ -273,15 +273,12 @@ export default function AdminDashboardPage() {
                             <FieldRangeSlider 
                                 title="Preço"
                                 value={priceFilter}
-                                displayValue={[
-                                    `${formatCurrency(priceFilter[0])}`, 
-                                    `${formatCurrency(priceFilter[1])}`
-                                ]}
                                 min={MIN_PRICE}
                                 max={MAX_PRICE}
                                 valuetext={pricetext}
                                 onChange={handlePriceFilter}
                                 onApply={applyPriceFilter}
+                                valueFormatter={(value: string) => formatCurrency(Number(value))}
                             />
                         </div>
 
@@ -289,7 +286,6 @@ export default function AdminDashboardPage() {
                             <FieldRangeSlider 
                                 title="Estoque"
                                 value={stockFilter}
-                                displayValue={[`${stockFilter[0]}`, `${stockFilter[1]}`]}
                                 min={MIN_STOCK}
                                 max={MAX_STOCK}
                                 valuetext={stocktext}

@@ -6,23 +6,23 @@ import Input from "../Input";
 interface FieldRangeSliderProps { 
   title: string
   value: number[] | number
-  displayValue: string[] | string
   min: number
   max: number
   valuetext: (value: number) => string
   onChange: (e: Event, range: number[]) => void
   onApply: () => void;
+  valueFormatter?: (value: string) => string
 }
 
 export default function FieldRangeSlider({
   title, 
   value, 
-  displayValue,
   min, 
   max,
   valuetext, 
   onChange,
   onApply,
+  valueFormatter
 }: FieldRangeSliderProps) {
 
   const handleChange = (
@@ -76,7 +76,7 @@ export default function FieldRangeSlider({
               <Input 
                 id="min-value-input"
                 placeholder="Valor mínimo"
-                value={String(value[0])}
+                value={valueFormatter ? valueFormatter(String(value[0])) : String(value[0])}
                 onChange={onHandleMinValueChange}
                 onBlur={onApply}
                 onKeyDown={(e) => {
@@ -84,12 +84,13 @@ export default function FieldRangeSlider({
                         onApply();
                     }
                 }}
+                className="text-xs rounded-sm"
               />
 
               <Input 
                 id="min-value-input"
                 placeholder="Valor mínimo"
-                value={String(value[1])}
+                value={valueFormatter ? valueFormatter(String(value[1])) : String(value[1])}
                 onChange={onHandleMaxValueChange}
                 onBlur={onApply}
                 onKeyDown={(e) => {
@@ -97,6 +98,7 @@ export default function FieldRangeSlider({
                         onApply();
                     }
                 }}
+                className="text-xs rounded-sm"
               />
           </div>
         }
