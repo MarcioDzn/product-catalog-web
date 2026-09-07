@@ -38,16 +38,18 @@ export default function Pagination({ pageQuantity, maxVisiblePages, currentPage,
                 onSelect={onPageChange}
             />
             {
+                (startPage > 1 || pageQuantity === 0) &&
+                <PaginationNumber
+                    key={1}
+                    pageNumber={1}
+                    selected={currentPage === 1}
+                    onSelect={onPageChange}
+                />
+            }
+
+            {
                 startPage > 1 &&
-                <>
-                    <PaginationNumber
-                        key={1}
-                        pageNumber={1}
-                        selected={currentPage === 1}
-                        onSelect={onPageChange}
-                    />
-                    <span>...</span>
-                </>
+                <span>...</span>
             }
 
             {visiblePages.map((pageNumber) => (
@@ -74,7 +76,7 @@ export default function Pagination({ pageQuantity, maxVisiblePages, currentPage,
             <PaginationArrow 
                 direction="right" 
                 currentPageNumber={currentPage} 
-                isDisabled={currentPage === pageQuantity}
+                isDisabled={currentPage === pageQuantity || pageQuantity === 0}
                 onSelect={onPageChange}
             />
         </div>
