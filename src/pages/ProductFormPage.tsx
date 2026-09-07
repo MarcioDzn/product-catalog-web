@@ -43,7 +43,17 @@ export default function ProductFormPage() {
     }
 
     function handleRemoveImage(index: number) {
-        setImages(images.filter((_, i) => i != index))
+        const imageToRemove = images[index];
+        const remainingImages = images.filter((_, i) => i !== index);
+
+        if (imageToRemove?.is_cover && remainingImages.length > 0) {
+            remainingImages[0] = {
+                ...remainingImages[0],
+                is_cover: true
+            };
+        }
+
+        setImages(remainingImages);
     }
 
     const {
@@ -139,6 +149,22 @@ export default function ProductFormPage() {
         return errors
     }
 
+    function handleSelectCoverImage(index: number) {
+        setImages(images.map((img, imgIndex) => {
+            if (imgIndex == index) {
+                return {
+                    id: img.id,
+                    url: img.url,
+                    is_cover: true
+                }
+            }
+            return {
+                id: img.id,
+                url: img.url,
+                is_cover: false
+            }
+        }))
+    }
     async function handleCreateProduct(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault()
 
@@ -310,6 +336,7 @@ export default function ProductFormPage() {
                                 error={fieldErrors.images}
                                 handleRemoveImage={handleRemoveImage}
                                 handleAddImages={handleSetImages}
+                                handleSelectCoverImage={handleSelectCoverImage}
                             />
                         </div>
                     </div>

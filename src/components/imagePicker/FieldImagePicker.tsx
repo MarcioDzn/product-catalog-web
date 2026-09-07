@@ -9,6 +9,7 @@ type Props = {
     error: string
     handleRemoveImage: (index: number) => void
     handleAddImages: (images: ProductImage[]) => void
+    handleSelectCoverImage: (index: number) => void
 }
 
 export default function FieldImagePicker({ 
@@ -18,8 +19,10 @@ export default function FieldImagePicker({
     isDisabled,
     error,
     handleAddImages, 
-    handleRemoveImage 
+    handleRemoveImage,
+    handleSelectCoverImage
 }: Props) {
+
     return (
         <div className="flex flex-col gap-2 h-full">
             <label 
@@ -36,7 +39,7 @@ export default function FieldImagePicker({
                 {images.length > 0 && (
                     <div className="relative w-full aspect-square rounded-lg overflow-hidden bg-gray-100">
                         <img
-                            src={images[0].url}
+                            src={images.find((img) => img.is_cover)?.url}
                             alt={`Imagem principal`}
                             className="absolute inset-0 w-full h-full object-cover"
                         />
@@ -49,10 +52,12 @@ export default function FieldImagePicker({
                     grid-cols-3
                     gap-3
                 ">
-                    {images.map((image, index) => (
+                    {images.map((img, index) => (
                         <div
-                            className="group relative min-h-0 min-w-0 w-full aspect-square overflow-hidden rounded-lg bg-gray-100"
-                            key={index}
+                            className={
+                                `group relative min-h-0 min-w-0 w-full aspect-square overflow-hidden rounded-lg bg-gray-100 ${img.is_cover && "border-2"}`}
+                            onClick={() => handleSelectCoverImage(index)}
+                            key={`${img.id}-${index}`}
                         >
                             <div 
                                 className="relative w-full h-full bg-gray-500 z-11 opacity-0 group-hover:opacity-20 transition-opacity"
@@ -60,7 +65,10 @@ export default function FieldImagePicker({
                             <button
                                 type="button"
                                 className="flex justify-center items-center opacity-0 group-hover:opacity-100 absolute right-1 top-1 z-20 cursor-pointer rounded-lg w-6 h-6 bg-white shadow-sm transition-opacity"
-                                onClick={() => handleRemoveImage(index)}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleRemoveImage(index);
+                                }}
                             >
                                 <svg 
                                     xmlns="http://www.w3.org/2000/svg" 
@@ -78,8 +86,8 @@ export default function FieldImagePicker({
                                 </svg>
                             </button>
                             <img
-                                src={image.url}
-                                alt={`Imagem ${index + 1}`}
+                                src={img.url}
+                                alt={`Imagem ${img.id + 1}`}
                                 className="absolute inset-0 w-full h-full object-cover"
                             />
                         </div>
@@ -91,12 +99,14 @@ export default function FieldImagePicker({
                                 description=""
                                 isDisabled={isDisabled}
                                 onChange={(urls: string[]) => {
-                                    const newImagesObjects = urls.map(url => ({
-                                        id: 0, 
-                                        url: url,
-                                        is_cover: false
+                                    const hasCover = images.some((img) => img.is_cover);
+
+                                    const newImagesObjects = urls.map((url, index) => ({
+                                        id: 0,
+                                        url,
+                                        is_cover: !hasCover && index === 0
                                     } as ProductImage));
-                                    
+
                                     handleAddImages(newImagesObjects);
                                 }}
                             />
