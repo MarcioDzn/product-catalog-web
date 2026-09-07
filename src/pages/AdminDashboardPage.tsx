@@ -196,7 +196,7 @@ export default function AdminDashboardPage() {
     }
 
     return (
-        <main className="py-8">     
+        <main>     
             <div className="flex flex-col">
                 <div className="w-full flex justify-between items-center mb-4">
                     <div>
@@ -216,8 +216,8 @@ export default function AdminDashboardPage() {
                     />
                 </div>
 
-                <div className="flex flex-row gap-4">
-                    <div className="max-w-48 w-full">
+                <div className="flex flex-row gap-8">
+                    <div className="flex flex-col gap-4 max-w-64 w-ful">
                         <div className="flex flex-col">
                             <span className="font-bold">Ordenar por</span>
                             <Select

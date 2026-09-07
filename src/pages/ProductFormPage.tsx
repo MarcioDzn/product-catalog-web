@@ -165,6 +165,7 @@ export default function ProductFormPage() {
             }
         }))
     }
+
     async function handleCreateProduct(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault()
 
@@ -194,10 +195,10 @@ export default function ProductFormPage() {
             price: data.price,
             is_visible: data.status === "active",
             stock: data.stock,
-            images: data.images.map((image, index) => ({
+            images: data.images.map((image) => ({
                 url: image.url,
                 product_id: 0,
-                is_cover: index === 0,
+                is_cover: image.is_cover,
             })),
         }
 
