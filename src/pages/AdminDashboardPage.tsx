@@ -134,8 +134,8 @@ export default function AdminDashboardPage() {
         isLoading: isLoadingCategory,
         isError: isErrorCategory,
     } = useQuery({
-        queryKey: ["categories", search],
-        queryFn: () => getCategories(search),
+        queryKey: ["categories"],
+        queryFn: () => getCategories(),
     });
 
     useEffect(() => {
