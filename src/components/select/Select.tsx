@@ -1,4 +1,5 @@
 import type { ChangeEvent} from "react";
+import { twMerge } from "tailwind-merge";
 
 type Option = {
     value: string
@@ -9,15 +10,19 @@ type Props = {
     value: string;
     options: Option[]
     onChange: (e: ChangeEvent<HTMLSelectElement>, value: string) => void;
+    className: string
 };
 
-export default function Select({ value, options, onChange }: Props) {
+export default function Select({ value, options, onChange, className }: Props) {
     return (
         <div className="relative w-full">
             <select
                 value={value}
                 onChange={(e: ChangeEvent<HTMLSelectElement>) => onChange(e, e.target.value)}
-                className="cursor-pointer appearance-none rounded-lg w-full h-full border border-gray-200 bg-white px-3 py-2 pr-10 text-sm outline-none transition focus:border-gray-400"
+                className={twMerge(
+                    "cursor-pointer appearance-none rounded-lg w-full h-full border border-gray-200 bg-white px-3 py-2 pr-10 text-sm outline-none transition focus:border-gray-400",
+                    className
+                )}
             >
                 {
                     options.map((option) =>

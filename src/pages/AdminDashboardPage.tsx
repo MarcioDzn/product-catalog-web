@@ -10,6 +10,7 @@ import FieldRangeSlider from "../components/slider/FieldRangeSlider";
 import { formatCurrency, maskCurrencyInput, parseCurrency } from "../utils/money";
 import Select from "../components/select/Select";
 import type { Product } from "../types/Products";
+import Divider from "../components/Divider";
 
 function pricetext(price: number) {
   return `R$${price}`;
@@ -198,34 +199,26 @@ export default function AdminDashboardPage() {
     return (
         <main>     
             <div className="flex flex-col">
-                <div className="w-full flex justify-between items-center mb-4">
-                    <div>
-                        <h2 className="font-bold text-2xl">
-                            Produtos
-                        </h2>
-                        <p>
-                            {products?.total_items} produtos encontrados.
-                        </p>
-                    </div>
-
-
-                    <Button
-                        type="button"
-                        text="Adicionar produto"
-                        onClick={() => navigate("/admin/products/new")}
-                    />
+                <div>
+                    <h2 className="font-bold text-4xl">
+                        Produtos
+                    </h2>
+                    <p>
+                        {products?.total_items} produtos encontrados.
+                    </p>
                 </div>
 
-                <div className="flex flex-row gap-8">
-                    <div className="flex flex-col gap-4 max-w-64 w-ful">
-                        <div className="flex flex-col">
-                            <span className="font-bold">Ordenar por</span>
+                <div className="w-full flex justify-end items-center mb-4">
+                    <div className="flex gap-2 items-center justify-end">
+                        <div className="flex justify-between items-center gap-2">
+                            <span className="whitespace-nowrap">Ordenar por</span>
                             <Select
+                                className="h-12"
                                 value={currentSortFilter}  
                                 options={[
                                     {
                                         value: "default",
-                                        text: "Escolha"  
+                                        text: "Mais relevantes"  
                                     },
                                     {
                                         value: "price_desc",
@@ -255,8 +248,19 @@ export default function AdminDashboardPage() {
                                 onChange={handleSortChange}
                             />
                         </div>
-                        
 
+                        <Button
+                            type="button"
+                            text="Adicionar produto"
+                            onClick={() => navigate("/admin/products/new")}
+                            className="h-12"
+                        />
+                    </div>
+
+                </div>
+
+                <div className="flex flex-row gap-8">
+                    <div className="flex flex-col gap-4 max-w-64 w-ful">
                         <Accordion 
                             title="Categorias"
                             items={categories.map((category) => ({
@@ -268,6 +272,8 @@ export default function AdminDashboardPage() {
                             selectedItems={categoryIds.map((categoryId) => Number(categoryId))}
                             onChange={handleCategorySelect}
                         />
+
+                        <Divider />
 
                         <div className="flex flex-col">
                             <FieldRangeSlider 
@@ -283,6 +289,8 @@ export default function AdminDashboardPage() {
                                 maskInput={maskCurrencyInput}
                             />
                         </div>
+                        
+                        <Divider />
 
                         <div className="flex flex-col">
                             <FieldRangeSlider 
