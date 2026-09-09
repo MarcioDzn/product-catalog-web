@@ -11,6 +11,7 @@ import { formatCurrency, maskCurrencyInput, parseCurrency } from "../utils/money
 import Select from "../components/select/Select";
 import type { Product } from "../types/Products";
 import Divider from "../components/Divider";
+import AccordionSelectionItem from "../components/accordion/AccordionSelectionItem";
 
 function pricetext(price: number) {
   return `R$${price}`;
@@ -56,6 +57,8 @@ export default function AdminDashboardPage() {
     ])
 
     const [isCategoryAccordionOpen, setIsCategoryAccordionOpen] = useState(true)
+    const [isPriceAccordionOpen, setIsPriceAccordionOpen] = useState(true)
+    const [isStockAccordionOpen, setIsStockAccordionOpen] = useState(true)
 
     const navigate = useNavigate();
 
@@ -261,23 +264,36 @@ export default function AdminDashboardPage() {
 
                 <div className="flex flex-row gap-8">
                     <div className="flex flex-col gap-4 max-w-64 w-ful">
-                        <Accordion 
+                        <Accordion
                             title="Categorias"
-                            items={categories.map((category) => ({
-                                id: category.id,
-                                text: category.name
-                            }))}
                             isOpen={isCategoryAccordionOpen}
                             setIsOpen={setIsCategoryAccordionOpen}
-                            selectedItems={categoryIds.map((categoryId) => Number(categoryId))}
-                            onChange={handleCategorySelect}
-                        />
+                        >
+                            {
+                                categories.map((category) => ({
+                                    id: category.id,
+                                    text: category.name
+                                }))
+                                .map((item) => (
+                                    <AccordionSelectionItem 
+                                        key={item.id}
+                                        id={item.id}
+                                        value={item.text}
+                                        checked={categoryIds.map((categoryId) => Number(categoryId)).includes(item.id)}
+                                        onChange={handleCategorySelect}
+                                    />
+                                ))
+                            }
+                        </Accordion>
 
                         <Divider />
 
-                        <div className="flex flex-col">
+                        <Accordion
+                            title="Preço"
+                            isOpen={isPriceAccordionOpen}
+                            setIsOpen={setIsPriceAccordionOpen}
+                        >
                             <FieldRangeSlider 
-                                title="Preço"
                                 value={priceFilter}
                                 min={MIN_PRICE}
                                 max={MAX_PRICE}
@@ -288,13 +304,16 @@ export default function AdminDashboardPage() {
                                 valueParser={parseCurrency} 
                                 maskInput={maskCurrencyInput}
                             />
-                        </div>
-                        
+                        </Accordion>
+
                         <Divider />
 
-                        <div className="flex flex-col">
+                        <Accordion
+                            title="Estoque"
+                            isOpen={isStockAccordionOpen}
+                            setIsOpen={setIsStockAccordionOpen}
+                        >
                             <FieldRangeSlider 
-                                title="Estoque"
                                 value={stockFilter}
                                 min={MIN_STOCK}
                                 max={MAX_STOCK}
@@ -302,8 +321,7 @@ export default function AdminDashboardPage() {
                                 onChange={handleStockFilter}
                                 onApply={applyStockFilter}
                             />
-                        </div>
-
+                        </Accordion>
                     </div>
 
                     <ProductCardAdminList 
