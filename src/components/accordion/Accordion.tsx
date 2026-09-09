@@ -8,25 +8,17 @@ type Item = {
 
 type Props = {
     title: string
-    items: Item[]
-    selectedItems: number[]
+    children: React.ReactNode
     isOpen: boolean
     setIsOpen: (value: boolean) => void
-    onChange: (id: number) => void
 }
 
 export default function Accordion({ 
     title, 
-    items, 
-    selectedItems, 
+    children,
     isOpen,
     setIsOpen,
-    onChange
 }: Props) {
-    const handleItemSelect = (itemId: number) => {
-        onChange(itemId)
-    }
-
     return (
         <div className="flex flex-col gap-2 items-start w-full">
             <div 
@@ -77,22 +69,20 @@ export default function Accordion({
                 }
             </div>
 
-            {
-                isOpen &&
-                <div>
-                    {
-                        items.map((item) => (
-                            <AccordionSelectionItem 
-                                key={item.id}
-                                id={item.id}
-                                value={item.text}
-                                checked={selectedItems.includes(item.id)}
-                                onChange={handleItemSelect}
-                            />
-                        ))
+            <div
+                className={`
+                    w-full overflow-hidden
+                    transition-all duration-300 ease-in-out
+                    ${isOpen 
+                        ? "max-h-96 opacity-100" 
+                        : "max-h-0 opacity-0"
                     }
-                </div>
-            }
+                `}
+            >
+                {
+                    children
+                }
+            </div>
         </div>
     )
 }
