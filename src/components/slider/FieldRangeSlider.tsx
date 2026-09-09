@@ -3,7 +3,7 @@ import { useId, useState, useEffect } from "react";
 import Input from "../Input";
 
 interface FieldRangeSliderProps { 
-  title: string
+  title?: string
   value: number[] | number
   min: number
   max: number
@@ -114,18 +114,36 @@ export default function FieldRangeSlider({
 
   return (
       <div className="flex flex-col gap-2 h-full">
-        <span className="font-bold">{title}</span>
+        {
+          title && <span className="font-bold">{title}</span>
+        }
         
         <Slider
-          getAriaLabel={() => title}
+          getAriaLabel={() => title ? title : ""}
           value={value}
           onChange={handleChange}
           onChangeCommitted={onApply}
-          valueLabelDisplay="auto"
+          valueLabelDisplay="off"
           getAriaValueText={valuetext}
           min={min}
           max={max}
-          sx={{ color: '#000' }}
+          sx={{
+              color: "#000",
+              width: "calc(100% - 16px)",
+              marginLeft: "8px", 
+              "& .MuiSlider-thumb": {
+                  width: 16,
+                  height: 16,
+                  backgroundColor: "#fff", 
+                  border: "2px solid #000", 
+                  boxShadow: "none", 
+              },
+
+              "& .MuiSlider-rail": {
+                  left: "-8px",
+                  width: "calc(100% + 16px)",
+              },
+            }}
         />
 
         {
