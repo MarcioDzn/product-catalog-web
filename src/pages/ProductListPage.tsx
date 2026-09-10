@@ -3,6 +3,7 @@ import { useSearchParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { getProducts } from "../services/products";
 import { useState } from "react";
+import type { Product } from "../types/Products";
 
 export default function ProductListPage() {
     const [searchParams] = useSearchParams();
@@ -13,12 +14,26 @@ export default function ProductListPage() {
 
 
     const {
-        data: products = [],
+        data: products,
         isLoading,
         isError,
     } = useQuery({
         queryKey: ["products", search],
-        queryFn: () => getProducts(search, categoryIds, 1, 6),
+        queryFn: () => getProducts(
+            search, 
+            categoryIds.map(categoryId => Number(categoryId)), 
+            {
+                minPrice: 0,
+                maxPrice: 10000
+            }, 
+            {
+                minStock: 0,
+                maxStock: 10000
+            },
+            "default",
+            1,
+            6 
+        ),
     });
 
     if (isLoading) {
@@ -41,7 +56,7 @@ export default function ProductListPage() {
             </span>
 
             <ProductCardList 
-                products={products}
+                products={products ? products?.products : [] as Product[]}
             />
         </main>
 
