@@ -24,8 +24,15 @@ export default function ProductCard({ image, title, description, price }: Props)
 
                 <div className="absolute inset-0 bg-white/30 opacity-0 transition-opacity duration-300 ease-in-out group-hover:opacity-100" />
             </div>
+            
+            {/* O "group" nesta div vai controlar o hover dos elementos filhos */}
             <div className="group flex flex-col cursor-pointer">
-                <h1 className="font-semibold text-lg leading-tight transition-colors duration-300 ease-in-out group-hover:text-gray-500">{title}</h1>
+                <h1 className="relative w-fit font-semibold text-lg leading-tight">
+                    {title}
+
+                    {/* Mudei de "hover:scale-x-100" para "group-hover:scale-x-100" */}
+                    <span className="absolute left-0 -bottom-1 h-[1px] w-full origin-left scale-x-0 bg-black transition-transform duration-300 ease-out group-hover:scale-x-100" />
+                </h1>
                 <span className="font-light text-sm text-gray-500 leading-relaxed line-clamp-2 group-hover:text-gray-500">{description}</span>
                 <span className="mt-2 font-bold text-xl">{formatCurrency(price)}</span>
             </div>
