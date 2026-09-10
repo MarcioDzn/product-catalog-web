@@ -203,7 +203,7 @@ export default function AdminDashboardPage() {
         <main>     
             <div className="flex flex-col">
                 <div>
-                    <h2 className="font-bold text-4xl">
+                    <h2 className="font-bold text-4xl pt-8">
                         Produtos
                     </h2>
                     <p>

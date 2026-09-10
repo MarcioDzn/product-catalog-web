@@ -213,7 +213,7 @@ export default function ProductFormPage() {
         <main>
             <form id="product-form" onSubmit={handleCreateProduct}>
                 <div className="flex justify-between items-center mb-4">
-                    <div className="flex items-center w-full gap-4">
+                    <div className="flex items-center w-full gap-4 pt-8">
                         <Button 
                             className="border border-gray-400 p-1 rounded-md cursor-pointer text-black bg-white hover:bg-gray-100"
                             type="button"
