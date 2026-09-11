@@ -14,6 +14,7 @@ import ActionNavbar from './components/navbar/ActionNavbar.tsx';
 import PageActionProviderLayout from './components/layouts/PageActionProviderLayout.tsx';
 import ProductFormPage from './pages/ProductFormPage.tsx';
 import { Toaster } from 'react-hot-toast';
+import ProductPage from './pages/ProductPage.tsx';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -27,6 +28,13 @@ createRoot(document.getElementById('root')!).render(
               <Route element={<AppLayout />}>
                 <Route
                   path="/products"
+                  element={<ProductListPage />}
+                />
+              </Route>
+
+              <Route element={<ProductPage />}>
+                <Route
+                  path="/products/:id"
                   element={<ProductListPage />}
                 />
               </Route>

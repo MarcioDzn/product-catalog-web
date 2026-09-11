@@ -7,6 +7,7 @@ type Props = {
     currentPage: number
     pageQuantity: number
     onPageChange: (page: number) => void
+    onProductClick: (id: number) => void
 };
 
 export default function ProductCardList({ 
@@ -14,6 +15,7 @@ export default function ProductCardList({
     currentPage,
     pageQuantity,
     onPageChange,
+    onProductClick
 }: Props) {
     
     return (
@@ -29,10 +31,12 @@ export default function ProductCardList({
                     {products.map((product) => (
                         <ProductCard 
                             key={product.id}
+                            id={product.id}
                             title={product.title}
                             description={product.description}
                             price={product.price}
                             image={product.images.find((image) => image.is_cover)}
+                            onProductClick={onProductClick}
                         />
                     ))}
                 </div>

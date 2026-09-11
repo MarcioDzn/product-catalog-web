@@ -43,6 +43,10 @@ export default function ProductListPage() {
 
     const navigate = useNavigate();
 
+    const handleProductClick = (id: number) => {
+        navigate("/products/" + id)
+    }
+
     const applyPriceFilter = () => {
         setTimeout(() => {
             const params = new URLSearchParams(searchParams);
@@ -245,6 +249,7 @@ export default function ProductListPage() {
                         currentPage={page}
                         pageQuantity={products ? products?.total_pages : 0}
                         onPageChange={handlePageChange}
+                        onProductClick={handleProductClick}
                     />
                 </div>
 
