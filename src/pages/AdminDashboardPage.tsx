@@ -59,6 +59,7 @@ export default function AdminDashboardPage() {
     const [isCategoryAccordionOpen, setIsCategoryAccordionOpen] = useState(true)
     const [isPriceAccordionOpen, setIsPriceAccordionOpen] = useState(true)
     const [isStockAccordionOpen, setIsStockAccordionOpen] = useState(true)
+    const [isFilterMobileOpen, setIsFilterMobileOpen] = useState(false);
 
     const navigate = useNavigate();
 
@@ -211,118 +212,162 @@ export default function AdminDashboardPage() {
                     </p>
                 </div>
 
-                <div className="w-full flex justify-end items-center mb-4">
-                    <div className="flex gap-2 items-center justify-end">
+                <div className="w-full flex items-center mb-4">
+                    <div className="flex w-full flex-row gap-2 min-[465px]:items-center justify-between min-[465px]:justify-end mt-2">
                         <div className="flex justify-between items-center gap-2">
-                            <span className="whitespace-nowrap">Ordenar por</span>
-                            <Select
-                                className="h-12"
-                                value={currentSortFilter}  
-                                options={[
-                                    {
-                                        value: "default",
-                                        text: "Mais relevantes"  
-                                    },
-                                    {
-                                        value: "price_desc",
-                                        text: "Maior Preço"  
-                                    },
-                                    {
-                                        value: "price_asc",
-                                        text: "Menor Preço"  
-                                    },
-                                    {
-                                        value: "stock_asc",
-                                        text: "Menor Estoque"  
-                                    },
-                                    {
-                                        value: "stock_desc",
-                                        text: "Maior Estoque"  
-                                    },
-                                    {
-                                        value: "newest",
-                                        text: "Mais recentes"  
-                                    },
-                                    {
-                                        value: "oldest",
-                                        text: "Mais antigos"  
-                                    }
+                            <div className="flex items-center gap-2">
+                                <button
+                                    onClick={() => setIsFilterMobileOpen(true)}
+                                    className="lg:hidden border border-gray-300 rounded-lg px-4 h-12 text-sm font-medium hover:bg-gray-50 active:bg-gray-100 cursor-pointer"
+                                >
+                                    Filtros
+                                </button>
+                                <span className="whitespace-nowrap hidden lg:block">Ordenar por</span>
+                                <Select
+                                    className="h-12"
+                                    value={currentSortFilter}  
+                                    options={[
+                                        {
+                                            value: "default",
+                                            text: "Mais relevantes"  
+                                        },
+                                        {
+                                            value: "price_desc",
+                                            text: "Maior Preço"  
+                                        },
+                                        {
+                                            value: "price_asc",
+                                            text: "Menor Preço"  
+                                        },
+                                        {
+                                            value: "stock_asc",
+                                            text: "Menor Estoque"  
+                                        },
+                                        {
+                                            value: "stock_desc",
+                                            text: "Maior Estoque"  
+                                        },
+                                        {
+                                            value: "newest",
+                                            text: "Mais recentes"  
+                                        },
+                                        {
+                                            value: "oldest",
+                                            text: "Mais antigos"  
+                                        }
                                 ]}
-                                onChange={handleSortChange}
-                            />
+                                    onChange={handleSortChange}
+                                />
+                            </div>
                         </div>
+                            
 
                         <Button
                             type="button"
-                            text="Adicionar produto"
                             onClick={() => navigate("/admin/products/new")}
-                            className="h-12"
-                        />
+                            className="h-11 px-4 sm:px-5 rounded-xl shadow-sm text-sm font-semibold flex items-center justify-center gap-2"
+                        >
+                            <svg 
+                                xmlns="http://www.w3.org/2000/svg" 
+                                fill="none" 
+                                viewBox="0 0 24 24" 
+                                strokeWidth={2} 
+                                stroke="currentColor" 
+                                className="size-5"
+                            >
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                            </svg>
+
+                            <span className="hidden min-[465px]:inline">Adicionar produto</span>
+                        </Button>
                     </div>
 
                 </div>
 
                 <div className="flex flex-row gap-8">
-                    <div className="flex flex-col gap-4 max-w-64 w-ful">
-                        <Accordion
-                            title="Categorias"
-                            isOpen={isCategoryAccordionOpen}
-                            setIsOpen={setIsCategoryAccordionOpen}
+                    {isFilterMobileOpen && (
+                        <div 
+                            className="fixed inset-0 z-40 lg:hidden"
+                            onClick={() => setIsFilterMobileOpen(false)}
+                        />
+                    )}
+
+                    <aside className={`
+                        fixed top-0 left-0 z-50 h-full w-80 max-w-[85vw] bg-white p-6 shadow-xl overflow-y-auto transition-transform duration-300 ease-in-out
+                        ${isFilterMobileOpen ? "translate-x-0" : "-translate-x-full"}
+                        lg:translate-x-0 lg:static lg:z-auto lg:h-auto lg:w-64 lg:max-w-64 lg:p-0 lg:shadow-none lg:overflow-visible
+                    `}>
+                        <Button
+                            onClick={() => setIsFilterMobileOpen(false)}
+                            className="flex w-full justify-between items-center mb-6 bg-transparent text-black hover:bg-transparent p-0 lg:hidden"
                         >
-                            {
-                                categories.map((category) => ({
-                                    id: category.id,
-                                    text: category.name
-                                }))
-                                .map((item) => (
-                                    <AccordionSelectionItem 
-                                        key={item.id}
-                                        id={item.id}
-                                        value={item.text}
-                                        checked={categoryIds.map((categoryId) => Number(categoryId)).includes(item.id)}
-                                        onChange={handleCategorySelect}
-                                    />
-                                ))
-                            }
-                        </Accordion>
+                            <h3 className="text-xl font-bold">Filtros</h3>
+                            <span className="text-gray-500 hover:text-gray-700 text-2xl font-bold p-1">
+                                &times;
+                            </span>
+                        </Button>
 
-                        <Divider />
+                        <div className="flex flex-col gap-4">
+                            <Accordion
+                                title="Categorias"
+                                isOpen={isCategoryAccordionOpen}
+                                setIsOpen={setIsCategoryAccordionOpen}
+                            >
+                                {
+                                    categories.map((category) => ({
+                                        id: category.id,
+                                        text: category.name
+                                    }))
+                                    .map((item) => (
+                                        <AccordionSelectionItem 
+                                            key={item.id}
+                                            id={item.id}
+                                            value={item.text}
+                                            checked={categoryIds.map((categoryId) => Number(categoryId)).includes(item.id)}
+                                            onChange={handleCategorySelect}
+                                        />
+                                    ))
+                                }
+                            </Accordion>
 
-                        <Accordion
-                            title="Preço"
-                            isOpen={isPriceAccordionOpen}
-                            setIsOpen={setIsPriceAccordionOpen}
-                        >
-                            <FieldRangeSlider 
-                                value={priceFilter}
-                                min={MIN_PRICE}
-                                max={MAX_PRICE}
-                                valuetext={pricetext}
-                                onChange={handlePriceFilter}
-                                onApply={applyPriceFilter}
-                                valueFormatter={formatCurrency}
-                                valueParser={parseCurrency} 
-                                maskInput={maskCurrencyInput}
-                            />
-                        </Accordion>
+                            <Divider />
 
-                        <Divider />
+                            <Accordion
+                                title="Preço"
+                                isOpen={isPriceAccordionOpen}
+                                setIsOpen={setIsPriceAccordionOpen}
+                            >
+                                <FieldRangeSlider 
+                                    value={priceFilter}
+                                    min={MIN_PRICE}
+                                    max={MAX_PRICE}
+                                    valuetext={pricetext}
+                                    onChange={handlePriceFilter}
+                                    onApply={applyPriceFilter}
+                                    valueFormatter={formatCurrency}
+                                    valueParser={parseCurrency} 
+                                    maskInput={maskCurrencyInput}
+                                />
+                            </Accordion>
 
-                        <Accordion
-                            title="Estoque"
-                            isOpen={isStockAccordionOpen}
-                            setIsOpen={setIsStockAccordionOpen}
-                        >
-                            <FieldRangeSlider 
-                                value={stockFilter}
-                                min={MIN_STOCK}
-                                max={MAX_STOCK}
-                                valuetext={stocktext}
-                                onChange={handleStockFilter}
-                                onApply={applyStockFilter}
-                            />
-                        </Accordion>
-                    </div>
+                            <Divider />
+
+                            <Accordion
+                                title="Estoque"
+                                isOpen={isStockAccordionOpen}
+                                setIsOpen={setIsStockAccordionOpen}
+                            >
+                                <FieldRangeSlider 
+                                    value={stockFilter}
+                                    min={MIN_STOCK}
+                                    max={MAX_STOCK}
+                                    valuetext={stocktext}
+                                    onChange={handleStockFilter}
+                                    onApply={applyStockFilter}
+                                />
+                            </Accordion>
+                        </div>
+                    </aside>
 
                     <ProductCardAdminList 
                         products={products ? products?.products : [] as Product[]}
