@@ -30,12 +30,9 @@ createRoot(document.getElementById('root')!).render(
                   path="/products"
                   element={<ProductListPage />}
                 />
-              </Route>
-
-              <Route element={<ProductPage />}>
                 <Route
                   path="/products/:id"
-                  element={<ProductListPage />}
+                  element={<ProductPage />}
                 />
               </Route>
             </Route>
