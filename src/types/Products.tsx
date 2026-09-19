@@ -17,6 +17,7 @@ export type Product = {
     category: Category;
     stock: number;
     price: number;
+    created_at: string
 }
 
 export type ProductResponse = {

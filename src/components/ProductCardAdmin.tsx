@@ -4,6 +4,7 @@ import { formatCurrency } from "../utils/money";
 import { CardOptionsModal } from "./CardOptionsModal";
 import SelectButton from "./SelectButton";
 import Toggle from "./Toggle";
+import { formatRelativeDate } from "../utils/time";
 
 type Props = {
     id: number;
@@ -11,6 +12,7 @@ type Props = {
     title: string;
     description: string;
     price: number;
+    created_at: string
     selectedProducts: Set<number>;
     category: string;
     stock: number;
@@ -25,6 +27,7 @@ export default function ProductCardAdmin({
     title,
     description,
     price,
+    created_at,
     selectedProducts,
     category,
     stock,
@@ -204,7 +207,7 @@ export default function ProductCardAdmin({
                             Criado
                         </span>
                         <span className="truncate text-xs font-medium text-gray-500">
-                            Há 10 min
+                            {formatRelativeDate(created_at)}
                         </span>
                     </div>
                 </div>

@@ -133,6 +133,7 @@ export default function ProductCardAdminList({
                                 title={product.title}
                                 description={product.description}
                                 price={product.price}
+                                created_at={product.created_at}
                                 stock={product.stock}
                                 category={product.category.name}
                                 image={product.images.find((image) => image.is_cover)}
