@@ -93,7 +93,7 @@ export default function ProductCardAdminList({
         <div className="w-full">
             <div className="rounded-2xl border border-gray-200 bg-white">
                 {/* Toolbar */}
-                <div className="flex items-center justify-between border-b border-gray-100 px-4 py-3">
+                <div className="flex flex-col-reverse gap-4 min-[480px]:flex-row min-[480px]:items-center justify-between border-b border-gray-100 px-4 py-3">
                     <div className="flex items-center gap-3 py-2">
 
                         <SelectButton
