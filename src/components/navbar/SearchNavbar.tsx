@@ -22,7 +22,7 @@ export default function SearchNavbar() {
     return (
         <>
             <Navbar>
-                <div className="w-full flex max-w-2xl">
+                <div className="w-full flex  mx-auto max-w-2xl">
                     <SearchInput value={search} placeholder="Buscar produtos..." onChange={setSearch} handleSearch={handleSearch}/>
                 </div>
             </Navbar>

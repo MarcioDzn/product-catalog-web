@@ -17,15 +17,17 @@ export default function Navbar({ children }: Props) {
 
     return (
         <>
-            <nav className="sticky top-0 z-50 w-full h-20 border-b border-gray-300 bg-white">
-                <div className="w-full h-full flex justify-between items-center gap-4 px-8">
+            <nav className="sticky top-0 z-50 w-full min-h-20 border-b border-gray-300 bg-white py-3 md:py-0 flex items-center">
+                <div className="w-full h-full flex flex-wrap md:flex-nowrap justify-between items-center gap-4 px-8">
                     <div>
                         <span className="font-extrabold text-xl">
                             CatalogWeb
                         </span>
                     </div>
 
-                    {children}
+                    <div className="order-last md:order-none w-full md:flex-1">
+                        {children}
+                    </div>
 
                     <div className="flex justify-between items-center">
                         <div className="flex justify-center items-center rounded-lg bg-lime-400 w-8 h-8 cursor-pointer">
