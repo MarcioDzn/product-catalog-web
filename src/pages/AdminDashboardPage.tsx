@@ -213,7 +213,7 @@ export default function AdminDashboardPage() {
                 </div>
 
                 <div className="w-full flex items-center mb-4">
-                    <div className="flex w-full flex-row gap-2 min-[465px]:items-center justify-between min-[465px]:justify-end mt-2">
+                    <div className="flex w-full flex-row gap-2 min-[480px]:items-center justify-between min-[480px]:justify-end mt-2">
                         <div className="flex justify-between items-center gap-2">
                             <div className="flex items-center gap-2">
                                 <button
@@ -278,7 +278,7 @@ export default function AdminDashboardPage() {
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                             </svg>
 
-                            <span className="hidden min-[465px]:inline">Adicionar produto</span>
+                            <span className="hidden min-[480px]:inline">Adicionar produto</span>
                         </Button>
                     </div>
 
@@ -368,7 +368,7 @@ export default function AdminDashboardPage() {
                             </Accordion>
                         </div>
                     </aside>
-
+                    
                     <ProductCardAdminList 
                         products={products ? products?.products : [] as Product[]}
                         maxProductsPerPage={ITEMS_PER_PAGE}
