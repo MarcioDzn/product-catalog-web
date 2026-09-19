@@ -37,7 +37,7 @@ export default function FieldImagePicker({
 
             <div className="flex flex-col gap-4 h-full">
                 {images.length > 0 && (
-                    <div className="relative w-full aspect-square rounded-lg overflow-hidden bg-gray-100">
+                    <div className="relative w-full aspect-3/4 rounded-lg overflow-hidden bg-gray-100">
                         <img
                             src={images.find((img) => img.is_cover)?.url}
                             alt={`Imagem principal`}

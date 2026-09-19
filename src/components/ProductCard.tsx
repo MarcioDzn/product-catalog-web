@@ -27,7 +27,7 @@ export default function ProductCard({
             }}
             className="flex flex-col gap-4 w-full overflow-hidden bg-white pb-4"
         >
-            <div className="group relative h-64 w-full overflow-hidden rounded-xl flex justify-center items-center cursor-pointer">
+            <div className="group aspect-3/4 relative w-full overflow-hidden rounded-xl flex justify-center items-center cursor-pointer">
 
                 {
                     image &&                 
