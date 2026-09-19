@@ -239,7 +239,7 @@ export default function ProductFormPage() {
                     </div>
                 </div>
 
-                <main className="w-full py-2 flex flex-col sm:flex-row justify-between gap-4">
+                <main className="w-full py-2 flex flex-col md:flex-row justify-between gap-4">
                     <div className="flex flex-col gap-4 flex-2">
                         <div className="border border-gray-200 rounded-lg p-4 flex flex-col gap-2">
                             <FieldInput 
@@ -260,7 +260,7 @@ export default function ProductFormPage() {
                         </div>
 
 
-                        <div className="flex flex-row justify-between gap-4 border border-gray-200 rounded-lg p-4">
+                        <div className="flex flex-col md:flex-row justify-between gap-4 border border-gray-200 rounded-lg p-4">
                             <div className="w-full">
                                 <FieldInput 
                                     id="product-price"
