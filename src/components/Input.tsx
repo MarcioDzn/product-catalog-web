@@ -8,6 +8,7 @@ type Props = {
     value: string
     placeholder: string
     mode?: InputMaskMode
+    type?: "text" | "password"
     onChange: (value: string) => void
     className?: string
     onBlur?: () => void
@@ -19,6 +20,7 @@ export default function Input({
     value,
     placeholder,
     mode,
+    type = "text",
     onChange,
     className,
     onBlur,
@@ -44,7 +46,7 @@ export default function Input({
                 "w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm text-gray-900 outline-none placeholder-gray-500 focus:border-black [&::-webkit-search-cancel-button]:appearance-none",
                 className
             )}
-            type="text"
+            type={type}
             inputMode={inputMode}
             placeholder={placeholder}
             value={displayValue}

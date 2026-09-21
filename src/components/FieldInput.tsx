@@ -7,6 +7,7 @@ type Props = {
     placeholder: string,
     error: string
     mode?: "integer" | "float" | "currency"
+    type?: "text" | "password"
     onChange: (value: string) => void
 }
 
@@ -17,6 +18,7 @@ export default function FieldInput({
     placeholder, 
     error,
     mode, 
+    type = "text",
     onChange 
 }: Props) {
     return (
@@ -33,6 +35,7 @@ export default function FieldInput({
                 <Input 
                     id={id} 
                     value={value} 
+                    type={type}
                     placeholder={placeholder} 
                     mode={mode}
                     onChange={onChange}
