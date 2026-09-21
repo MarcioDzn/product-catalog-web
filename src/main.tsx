@@ -15,51 +15,62 @@ import PageActionProviderLayout from './components/layouts/PageActionProviderLay
 import ProductFormPage from './pages/ProductFormPage.tsx';
 import { Toaster } from 'react-hot-toast';
 import ProductPage from './pages/ProductPage.tsx';
+import AdminAuthPage from './pages/AdminAuthPage.tsx';
+import { AuthProvider } from './context/AuthContext.tsx';
+import ProtectedRoute from './components/ProtectedRoute.tsx';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
-          <Toaster position="bottom-right" />
+        <AuthProvider>
+            <Toaster position="bottom-right" />
 
-          <Routes>
-
-            <Route element={<SearchNavbar />}>
-              <Route element={<AppLayout />}>
-                <Route
-                  path="/products"
-                  element={<ProductListPage />}
-                />
-                <Route
-                  path="/products/:id"
-                  element={<ProductPage />}
-                />
-              </Route>
-            </Route>
-
-            <Route element={<Navbar />}>
-              <Route element={<AppLayout />}>
-                <Route
-                  path="/admin/products"
-                  element={<AdminDashboardPage />}
-                />
-              </Route>        
-            </Route>
-            <Route element={<PageActionProviderLayout />}>
-              <Route element={<ActionNavbar />}>
+            <Routes>
+              <Route element={<SearchNavbar />}>
                 <Route element={<AppLayout />}>
                   <Route
-                    path="/admin/products/new"
-                    element={<ProductFormPage />}
+                    path="/products"
+                    element={<ProductListPage />}
                   />
                   <Route
-                    path="/admin/products/:id"
-                    element={<ProductFormPage />}
+                    path="/products/:id"
+                    element={<ProductPage />}
                   />
-                </Route>        
+                </Route>
               </Route>
-            </Route>
-          </Routes>
+              <Route element={<ProtectedRoute />}>
+                <Route element={<Navbar />}>
+                  <Route element={<AppLayout />}>
+                    <Route
+                      path="/admin/products"
+                      element={<AdminDashboardPage />}
+                    />
+                  </Route>        
+                </Route>
+                <Route element={<PageActionProviderLayout />}>
+                  <Route element={<ActionNavbar />}>
+                    <Route element={<AppLayout />}>
+                      <Route
+                        path="/admin/products/new"
+                        element={<ProductFormPage />}
+                      />
+                      <Route
+                        path="/admin/products/:id"
+                        element={<ProductFormPage />}
+                      />
+                    </Route>        
+                  </Route>
+                </Route>
+              </Route>
+              <Route element={<AppLayout />}>
+                <Route
+                  path="/admin"
+                  element={<AdminAuthPage />}
+                />
+              </Route>
+            </Routes>
+          </AuthProvider>
         </BrowserRouter>
     </QueryClientProvider>
   </StrictMode>
