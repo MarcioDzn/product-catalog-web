@@ -295,7 +295,7 @@ export default function AdminDashboardPage() {
                     <aside className={`
                         fixed top-0 left-0 z-50 h-full w-80 max-w-[85vw] bg-white p-6 shadow-xl overflow-y-auto transition-transform duration-300 ease-in-out
                         ${isFilterMobileOpen ? "translate-x-0" : "-translate-x-full"}
-                        lg:translate-x-0 lg:static lg:z-auto lg:h-auto lg:w-64 lg:max-w-64 lg:p-0 lg:shadow-none lg:overflow-visible
+                        lg:translate-x-0 lg:static lg:z-auto lg:h-auto lg:w-96 lg:max-w-64 lg:p-0 lg:shadow-none lg:overflow-visible
                     `}>
                         <Button
                             onClick={() => setIsFilterMobileOpen(false)}

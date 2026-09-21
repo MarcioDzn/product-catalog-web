@@ -138,6 +138,9 @@ export default function FieldRangeSlider({
                   border: "2px solid #000", 
                   boxShadow: "none", 
               },
+              "&:hover": {
+                boxShadow: "none",
+              },
 
               "& .MuiSlider-rail": {
                   left: "-8px",

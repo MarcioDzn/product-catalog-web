@@ -58,11 +58,11 @@ export default function ProductCardAdmin({
 
     return (
         <div
-            className={`group relative flex w-full flex-col justify-between gap-4 rounded-xl border bg-white p-4 transition-all duration-200 ${
-                isSelected ? "border-gray-400 bg-gray-50/50" : "border-gray-200 hover:border-gray-300"
+            className={`group relative flex w-full flex-col justify-between gap-4 rounded-xl  bg-white p-4 transition-all duration-200 ${
+                isSelected ? "" : ""
             }`}
         >
-            <div className="flex items-center justify-between pb-3">
+            <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                     <div
                         className="flex shrink-0 cursor-pointer items-center justify-center"
@@ -78,7 +78,7 @@ export default function ProductCardAdmin({
                 <div ref={menuRef} className="relative">
                     <button
                         type="button"
-                        className="flex h-8 w-8 items-center justify-center rounded-lg text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-700 focus:outline-none"
+                        className="flex h-8 w-8 items-center justify-center rounded-lg text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-700 focus:outline-none cursor-pointer"
                         onClick={(e) => {
                             e.stopPropagation();
                             setOptionOpened((prev) => !prev);
